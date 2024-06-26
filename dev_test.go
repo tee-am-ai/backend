@@ -43,3 +43,15 @@ func TestSignUp(t *testing.T) {
 		fmt.Println("Data berhasil disimpan dengan email:", email)
 	}
 }
+
+func TestLogIn(t *testing.T) {
+	var user model.User
+	user.Email = "pedped@gmail.com"
+	user.Password = "pedi12345"
+	user, err := module.LogIn(db, user)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("Berhasil LogIn : ", user.Email)
+	}
+}
