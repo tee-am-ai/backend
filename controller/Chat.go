@@ -2,7 +2,6 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -45,7 +44,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
 	err = json.Unmarshal([]byte(response.String()), &data)
 	if err != nil {
-		fmt.Println("Error decoding JSON:", err)
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error parsing response body "+err.Error())
 		return
 	}
 
