@@ -57,7 +57,6 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 		"namalengkap": user.NamaLengkap,
 		"email": user.Email,
 		"password": hex.EncodeToString(hashedPassword),
-		"conformasiPassword": user.Confirmpassword,
 		"salt": hex.EncodeToString(salt),
 	}
 	insertedID, err := helper.InsertOneDoc(db, col, userData)
