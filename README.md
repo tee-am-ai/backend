@@ -1,3 +1,6 @@
 # backend
 
-## ini be
+```sh
+cd run
+go run main.go
+```
