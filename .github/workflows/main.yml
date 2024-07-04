@@ -11,7 +11,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Check secrets
-        run: echo "Length of GOOGLE_CREDENTIALS: ${#GOOGLE_CREDENTIALS}"
+        run: |
+          echo "Length of GOOGLE_CREDENTIALS: ${#GOOGLE_CREDENTIALS}"
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
       - name: GCP Authentication
