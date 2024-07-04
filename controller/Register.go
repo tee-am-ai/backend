@@ -15,23 +15,22 @@ import (
 	"golang.org/x/crypto/argon2"
 )
 
-
 func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
 	var user model.User
 
 	err := json.NewDecoder(req.Body).Decode(&user)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body " + err.Error())
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
 	}
 
-	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == ""{
+	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
 		return
 	}
 	if err := checkmail.ValidateFormat(user.Email); err != nil {
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
-		return 
+		return
 	}
 	userExists, _ := helper.GetUserFromEmail(user.Email, db)
 	if user.Email == userExists.Email {
@@ -55,22 +54,21 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	hashedPassword := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
 	userData := bson.M{
 		"namalengkap": user.NamaLengkap,
-		"email": user.Email,
-		"password": hex.EncodeToString(hashedPassword),
-		"salt": hex.EncodeToString(salt),
+		"email":       user.Email,
+		"password":    hex.EncodeToString(hashedPassword),
+		"salt":        hex.EncodeToString(salt),
 	}
 	insertedID, err := helper.InsertOneDoc(db, col, userData)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, " + err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
 		return
 	}
 	resp := map[string]any{
-		"message": "berhasil mendaftar",
+		"message":    "berhasil mendaftar",
 		"insertedID": insertedID,
-		"data" : map[string]string{
+		"data": map[string]string{
 			"email": user.Email,
 		},
 	}
 	helper.WriteJSON(respw, http.StatusCreated, resp)
 }
-

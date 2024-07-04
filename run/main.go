@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/tee-am-ai/backend/routes"
@@ -8,5 +9,7 @@ import (
 
 func main() {
 	http.HandleFunc("/", routes.URL)
-	http.ListenAndServe(":8080", nil)
+	port := ":8080"
+	fmt.Println("Server started at: http://localhost" + port)
+	http.ListenAndServe(port, nil)
 }
