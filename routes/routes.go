@@ -2,6 +2,7 @@ package routes
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/tee-am-ai/backend/config"
 	controller "github.com/tee-am-ai/backend/controller"
@@ -25,9 +26,9 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	case method == "POST" && path == "/signup":
 		controller.SignUp(config.Mongoconn, "users", w, r)
 	case method == "POST" && path == "/login":
-		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
+		controller.LogIn(config.Mongoconn, w, r, os.Getenv("PASETOPRIVATEKEY"))
 	case method == "POST" && path == "/chat":
-		controller.Chat(w, r, config.GetEnv("TOKENMODEL"))
+		controller.Chat(w, r, os.Getenv("TOKENMODEL"))
 	default:
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}

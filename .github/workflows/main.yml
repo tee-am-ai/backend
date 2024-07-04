@@ -39,7 +39,11 @@ jobs:
             --runtime=go122 \
             --trigger-http \
             --timeout=540s \
-            --set-env-vars=MONGOSTRING='${{ secrets.MONGOSTRING }}'
+            --set-env-vars=MONGOSTRING='${{ secrets.MONGOSTRING }}' \
+            --set-env-vars=PASETOPUBLICKEY='${{ secrets.PASETOPUBLICKEY }}' \
+            --set-env-vars=PASETOPRIVATEKEY='${{ secrets.PASETOPRIVATEKEY }}' \
+            --set-env-vars=TOKENMODEL='${{ secrets.TOKENMODEL }}' \
+            --set-env-vars=HUGGINGFACE_API_KEY='${{ secrets.HUGGINGFACE_API_KEY }}'
       - name: "Cek eksistensi fungsi"
         run: "gcloud functions describe teeamai --region=asia-southeast2"
       - name: "Cek log debugging"
