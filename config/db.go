@@ -1,12 +1,10 @@
 package config
 
 import (
-	"os"
-
 	"github.com/tee-am-ai/backend/helper"
 )
 
-var MongoString string = os.Getenv("MONGOSTRING")
+var MongoString string = GetEnv("MONGOSTRING")
 
 var mongoinfo = helper.DBInfo{
 	DBString: MongoString,

@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/tee-am-ai/backend/config"
 	"github.com/tee-am-ai/backend/helper"
 	"github.com/tee-am-ai/backend/model"
 )
@@ -29,7 +29,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	client := resty.New()
 
 	// Hugging Face API URL dan token
-	apiUrl := os.Getenv("HUGGINGFACE_API_KEY")
+	apiUrl := config.GetEnv("HUGGINGFACE_API_KEY")
 	apiToken := "Bearer " + tokenmodel
 
 	var response *resty.Response
