@@ -7,6 +7,7 @@ import (
 // Daftar origins yang diizinkan
 var Origins = []string{
 	"http://localhost:8080",
+	"https://tee-am-ai.github.io",
 }
 
 // Fungsi untuk memeriksa apakah origin diizinkan
