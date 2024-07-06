@@ -2,8 +2,11 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"net/url"
+	"strings"
 	"time"
 
 	"github.com/go-resty/resty/v2"
@@ -36,6 +39,17 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	var retryCount int
 	maxRetries := 5
 	retryDelay := 20 * time.Second
+	
+	parsedURL, err := url.Parse(apiUrl)
+
+	if err != nil {
+        fmt.Println("Error parsing URL:", err)
+        return
+    }
+
+	segments := strings.Split(parsedURL.Path, "/")
+
+	modelName := strings.Join(segments[2:], "/")
 
 	// Request ke Hugging Face API
 	for retryCount < maxRetries {
@@ -54,18 +68,18 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		} else {
 			var errorResponse map[string]interface{}
 			err = json.Unmarshal(response.Body(), &errorResponse)
-			if err == nil && errorResponse["error"] == "Model is currently loading" {
+			if err == nil && errorResponse["error"] == "Model " + modelName + " is currently loading" {
 				retryCount++
 				time.Sleep(retryDelay)
 				continue
 			}
-			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error from Hugging Face API "+string(response.Body()))
+			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "1.Internal Server Error", "error from Hugging Face API "+string(response.Body()))
 			return
 		}
 	}
 
 	if response.StatusCode() != 200 {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error from Hugging Face API "+string(response.Body()))
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "2.Internal Server Error", "error from Hugging Face API "+string(response.Body()))
 		return
 	}
 
