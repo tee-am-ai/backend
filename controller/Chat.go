@@ -2,7 +2,6 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -43,7 +42,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	parsedURL, err := url.Parse(apiUrl)
 
 	if err != nil {
-        fmt.Println("Error parsing URL:", err)
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error parsing URL model hugging face"+err.Error())
         return
     }
 
@@ -73,13 +72,13 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 				time.Sleep(retryDelay)
 				continue
 			}
-			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "1.Internal Server Error", "error from Hugging Face API "+string(response.Body()))
+			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error from Hugging Face API "+string(response.Body()))
 			return
 		}
 	}
 
 	if response.StatusCode() != 200 {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "2.Internal Server Error", "error from Hugging Face API "+string(response.Body()))
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Errorr", "error from Hugging Face API "+string(response.Body()))
 		return
 	}
 
