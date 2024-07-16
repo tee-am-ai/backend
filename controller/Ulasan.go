@@ -32,5 +32,6 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 			"namalengkap": ulasan.NamaLengkap,
 			"email":       ulasan.Email,
 			"rating":      ulasan.Rating,
+			"message":     ulasan.Message,
 		}
 }
