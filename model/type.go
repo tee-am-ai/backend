@@ -24,7 +24,8 @@ type Password struct {
 type Ulasan struct {
 	NamaLengkap      string `bson:"namalengkap" json:"namalengkap"`
 	Email					   string `bson:"email" json:"email"`
-	Rating					   string `bson:"rating" json:"rating"`
+	Rating					 string `bson:"rating" json:"rating"`
+	Message					 string `bson:"message" json:"message"`
 }
 
 type AIRequest struct {
