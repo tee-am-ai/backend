@@ -25,7 +25,7 @@ type Ulasan struct {
 	NamaLengkap      string `bson:"namalengkap,omitempty" json:"namalengkap"`
 	Email					   string `bson:"email,omitempty" json:"email"`
 	Rating					 string `bson:"rating,omitempty" json:"rating"`
-	Message					 string `bson:"message" json:"message"`
+	Message					 string `bson:"message,omitempty" json:"message"`
 }
 
 type AIRequest struct {
