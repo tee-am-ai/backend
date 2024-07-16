@@ -26,4 +26,9 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 			helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
 			return
 		}
+
+			// Masukkan data ulasan ke database
+		ulasanData := bson.M{
+	
+		}
 }
