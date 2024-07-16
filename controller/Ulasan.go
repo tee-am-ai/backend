@@ -29,6 +29,6 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 
 			// Masukkan data ulasan ke database
 		ulasanData := bson.M{
-	
+			"namalengkap": ulasan.NamaLengkap,
 		}
 }
