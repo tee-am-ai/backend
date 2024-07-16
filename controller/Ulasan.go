@@ -22,6 +22,6 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 		}
 
 		// Validasi input
-		if ulasan.NamaLengkap == ""  {
+		if ulasan.NamaLengkap == "" || ulasan.Email == "" {
 		}
 }
