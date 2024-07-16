@@ -57,4 +57,9 @@ func GetAllUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get data, "+err.Error())
 		return
 	}
+		// Response dengan data ulasan
+		resp := map[string]any{
+			"ulasan": ulasans,
+		}
+		helper.WriteJSON(respw, http.StatusOK, resp)
 	}
