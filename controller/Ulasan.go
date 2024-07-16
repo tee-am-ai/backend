@@ -31,6 +31,6 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 		ulasanData := bson.M{
 			"namalengkap": ulasan.NamaLengkap,
 			"email":       ulasan.Email,
-		
+			"rating":      ulasan.Rating,
 		}
 }
