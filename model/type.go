@@ -23,7 +23,7 @@ type Password struct {
 
 type Ulasan struct {
 	NamaLengkap      string `bson:"namalengkap,omitempty" json:"namalengkap"`
-	Email					   string `bson:"email" json:"email"`
+	Email					   string `bson:"email,omitempty" json:"email"`
 	Rating					 string `bson:"rating" json:"rating"`
 	Message					 string `bson:"message" json:"message"`
 }
