@@ -51,7 +51,8 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 // Fungsi untuk mendapatkan semua ulasan
 func GetAllUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
 	// Ambil semua data ulasan dari database
-	ulasans, err := helper.GetAllDocs(db, col)
+	var ulasans []model.Ulasan
+	ulasans, err := helper.GetAllDocs[[]model.Ulasan](db, col, bson.M{})
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get data, "+err.Error())
 		return
