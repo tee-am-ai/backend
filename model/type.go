@@ -22,7 +22,7 @@ type Password struct {
 }
 
 type Ulasan struct {
-	
+	NamaLengkap      string `bson:"namalengkap" json:"namalengkap"`
 }
 
 type AIRequest struct {
