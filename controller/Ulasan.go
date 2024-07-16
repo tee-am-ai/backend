@@ -12,5 +12,5 @@ import (
 
 // Fungsi untuk menambahkan ulasan
 func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
-
+	var ulasan model.Ulasan
 }
