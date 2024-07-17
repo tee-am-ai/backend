@@ -13,6 +13,7 @@ var Origins = []string{
 	"http://127.0.0.1:5503",
 	"http://localhost:5173",
 	"https://tee-am-ai.github.io",
+	"https://tee-am-ai.vercel.app",
 }
 
 // Fungsi untuk memeriksa apakah origin diizinkan
