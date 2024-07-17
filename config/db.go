@@ -5,10 +5,9 @@ import (
 )
 
 var MongoString string = GetEnv("MONGOSTRING")
-
 var mongoinfo = helper.DBInfo{
 	DBString: MongoString,
-	DBName:   "db_teeamai",
+	DBName:   "db_ku",
+	// DBName:   "db_teeamai",
 }
-
 var Mongoconn, ErrorMongoconn = helper.MongoConnect(mongoinfo)
