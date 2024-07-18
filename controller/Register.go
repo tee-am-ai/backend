@@ -16,8 +16,6 @@ import (
 )
 
 // SignUp adalah fungsi untuk menangani permintaan pendaftaran pengguna baru.
-// Fungsi ini memerlukan akses ke database MongoDB (db *mongo.Database),
-// nama koleksi MongoDB (col string), menanggapi permintaan HTTP (respw http.ResponseWriter, req *http.Request).
 func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
 	// Deklarasi variabel untuk menyimpan data pengguna yang dikirimkan dalam body permintaan HTTP
 	var user model.User
