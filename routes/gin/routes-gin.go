@@ -30,3 +30,7 @@ func SignUp(c *gin.Context) {
 	controller.SignUp(config.Mongoconn, "users", c.Writer, c.Request)
 }
 
+func LogIn(c *gin.Context) {
+	controller.LogIn(config.Mongoconn, c.Writer, c.Request, os.Getenv("PASETOPRIVATEKEY"))
+}
+
