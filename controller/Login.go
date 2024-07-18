@@ -1,15 +1,15 @@
 package controller
 
 import (
-	"encoding/hex"
-	"encoding/json"
-	"net/http"
+	"encoding/hex"  // Mengimpor paket encoding/hex untuk encoding dan decoding data hexadecimal
+	"encoding/json" // Mengimpor paket encoding/json untuk bekerja dengan JSON
+	"net/http"      // Mengimpor paket net/http untuk menangani HTTP request dan response
 
-	"github.com/badoux/checkmail"
-	"github.com/tee-am-ai/backend/helper"
-	model "github.com/tee-am-ai/backend/model"
-	"go.mongodb.org/mongo-driver/mongo"
-	"golang.org/x/crypto/argon2"
+	"github.com/badoux/checkmail"              // Mengimpor paket checkmail untuk memvalidasi alamat email
+	"github.com/tee-am-ai/backend/helper"      // Mengimpor package helper dari aplikasi backend
+	model "github.com/tee-am-ai/backend/model" // Mengimpor package model dari aplikasi backend
+	"go.mongodb.org/mongo-driver/mongo"        // Mengimpor paket mongo-driver untuk bekerja dengan MongoDB
+	"golang.org/x/crypto/argon2"               // Mengimpor paket argon2 untuk hashing kata sandi dengan algoritma Argon2
 )
 
 // user
@@ -17,7 +17,7 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 	var user model.User
 	err := json.NewDecoder(req.Body).Decode(&user)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body " + err.Error())
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
 	}
 	if user.Email == "" || user.Password == "" {
@@ -30,7 +30,7 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 	}
 	existsDoc, err := helper.GetUserFromEmail(user.Email, db)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get email " + err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get email "+err.Error())
 		return
 	}
 	salt, err := hex.DecodeString(existsDoc.Salt)
@@ -52,8 +52,8 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 		"status":  "success",
 		"message": "login berhasil",
 		"token":   tokenstring,
-		"data" : map[string]string{
-			"email": existsDoc.Email,
+		"data": map[string]string{
+			"email":       existsDoc.Email,
 			"namalengkap": existsDoc.NamaLengkap,
 		},
 	}
