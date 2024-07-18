@@ -2,6 +2,7 @@ package routes
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/tee-am-ai/backend/config"
@@ -50,9 +51,9 @@ func signUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func logIn(w http.ResponseWriter, r *http.Request) {
-	controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
+	controller.LogIn(config.Mongoconn, w, r, os.Getenv("PASETOPRIVATEKEY"))
 }
 
 func chat(w http.ResponseWriter, r *http.Request) {
-	controller.Chat(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
+	controller.Chat(w, r, os.Getenv("HUGGINGFACE_API_KEY"))
 }
