@@ -23,6 +23,10 @@ func MongoConnect(mconn DBInfo) (db *mongo.Database, err error)  {
 		return nil, err
 	}
 
+	if err := client.Ping(context.TODO(), nil); err != nil {
+		return nil, err
+	}
+
 	return client.Database(mconn.DBName), nil
 }
 
