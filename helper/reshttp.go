@@ -15,9 +15,9 @@ func ErrorResponse(respw http.ResponseWriter, req *http.Request, statusCode int,
 }
 
 func WriteJSON(respw http.ResponseWriter, statusCode int, content any) {
-	respw.Header().Set("Content-Type", "application/json")
-	respw.WriteHeader(statusCode)
-	respw.Write([]byte(Jsonstr(content)))
+	// respw.Header().Set("Content-Type", "application/json")
+	// respw.WriteHeader(statusCode)
+	// respw.Write([]byte(Jsonstr(content)))
 }
 
 func Jsonstr(strc any) string {
