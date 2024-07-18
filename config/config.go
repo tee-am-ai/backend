@@ -2,7 +2,6 @@ package config
 
 import (
 	"os" // Mengimpor paket os untuk bekerja dengan lingkungan sistem operasi
-	// "github.com/joho/godotenv" // Mengimpor paket godotenv (dikomentari)
 )
 
 // Fungsi GetEnv mengambil nilai dari environment variable berdasarkan nama yang diberikan
