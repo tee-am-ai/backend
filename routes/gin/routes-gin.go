@@ -8,3 +8,14 @@ import (
 	"github.com/tee-am-ai/backend/controller"
 )
 
+func Router() *gin.Engine {
+	r := gin.Default()
+
+	r.GET("/", Home)
+	r.POST("/signup", SignUp)
+	r.POST("/login", LogIn)
+	r.POST("/chat", Chat)
+
+	return r
+}
+
