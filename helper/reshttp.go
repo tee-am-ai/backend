@@ -25,10 +25,19 @@ func ErrorResponse(respw http.ResponseWriter, req *http.Request, statusCode int,
 }
 
 func WriteJSON(respw http.ResponseWriter, statusCode int, content any) {
+	// Mengatur header untuk menetapkan jenis konten sebagai application/json.
 	respw.Header().Set("Content-Type", "application/json")
+
+	// Menetapkan status kode HTTP untuk respons.
 	respw.WriteHeader(statusCode)
-	respw.Write([]byte(Jsonstr(content)))
+
+	// Mengubah konten ke dalam bentuk string JSON menggunakan fungsi Jsonstr.
+	jsonContent := Jsonstr(content)
+
+	// Menulis respons dalam bentuk byte array ke http.ResponseWriter.
+	respw.Write([]byte(jsonContent))
 }
+
 
 func Jsonstr(strc any) string {
 	jsonData, err := json.Marshal(strc)
