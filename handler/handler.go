@@ -24,3 +24,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 func LogIn(w http.ResponseWriter, r *http.Request) {
 	controller.LogIn(config.Mongoconn, w, r, os.Getenv("PASETOPRIVATEKEY"))
 }
+
+func Chat(w http.ResponseWriter, r *http.Request) {
+	controller.Chat(w, r, os.Getenv("HUGGINGFACE_API_KEY"))
+}
