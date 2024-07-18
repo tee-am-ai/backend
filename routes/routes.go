@@ -11,7 +11,7 @@ import (
 
 func Router() *mux.Router {
 	r := mux.NewRouter()
-	r.Use(permission)
+	r.Use(corsMiddleware)
 
 	r.HandleFunc("/", handler.Home).Methods("GET")
 	r.HandleFunc("/signup", handler.SignUp).Methods("POST")
@@ -21,7 +21,7 @@ func Router() *mux.Router {
 	return r
 }
 
-func permission(next http.Handler) http.Handler {
+func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			if config.SetAccessControlHeaders(w, r) {
