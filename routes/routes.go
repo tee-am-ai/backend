@@ -26,3 +26,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 func SignUp(w http.ResponseWriter, r *http.Request) {
 	controller.SignUp(config.Mongoconn, "users", w, r)
 }
+
+func LogIn(w http.ResponseWriter, r *http.Request) {
+	controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
+}
