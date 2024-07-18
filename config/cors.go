@@ -16,12 +16,12 @@ var Origins = []string{
 
 // Fungsi isAllowedOrigin memeriksa apakah origin yang diberikan diizinkan
 func isAllowedOrigin(origin string) bool {
-	for _, o := range Origins { // Iterasi melalui setiap origin yang diizinkan
-		if o == origin { // Jika origin cocok dengan salah satu yang diizinkan
-			return true // Kembalikan true
+	for _, o := range Origins {
+		if o == origin { 
+			return true 
 		}
 	}
-	return false // Jika tidak cocok, kembalikan false
+	return false
 }
 
 // Fungsi SetAccessControlHeaders mengatur header CORS untuk HTTP response
