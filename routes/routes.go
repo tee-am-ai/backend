@@ -9,21 +9,14 @@ import (
 )
 
 func URL(w http.ResponseWriter, r *http.Request) {
-	// SetAccessControlHeaders handles CORS preflight requests. If true, return early.
 	if config.SetAccessControlHeaders(w, r) {
 		return
 	}
-
-	// Check for MongoDB connection error. If not nil, return Internal Server Error response.
 	if config.ErrorMongoconn != nil {
 		helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : database, "+config.ErrorMongoconn.Error())
 		return
 	}
-
-	// Extract HTTP method and request path from the incoming request.
 	var method, path string = r.Method, r.URL.Path
-
-	// Route the request based on HTTP method and path.
 	switch {
 	case method == "GET" && path == "/":
 		Home(w, r) // Handle GET request to root path ("/") by calling Home function.
@@ -34,7 +27,6 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	case method == "POST" && path == "/chat":
 		controller.Chat(w, r, config.GetEnv("TOKENMODEL")) // Handle POST request to "/chat" path.
 	default:
-		// If no matching route is found, return a Not Found response.
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
 }
