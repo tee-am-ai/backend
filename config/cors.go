@@ -26,22 +26,22 @@ func isAllowedOrigin(origin string) bool {
 
 // Fungsi SetAccessControlHeaders mengatur header CORS untuk HTTP response
 func SetAccessControlHeaders(w http.ResponseWriter, r *http.Request) bool {
-	origin := r.Header.Get("Origin") // Mendapatkan nilai header Origin dari request
+	origin := r.Header.Get("Origin")
 
-	if isAllowedOrigin(origin) { // Memeriksa apakah origin diizinkan
-		if r.Method == http.MethodOptions { // Jika metode HTTP adalah OPTIONS (preflight request)
+	if isAllowedOrigin(origin) { 
+		if r.Method == http.MethodOptions { 
 			w.Header().Set("Access-Control-Allow-Credentials", "true")
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Login")
 			w.Header().Set("Access-Control-Allow-Methods", "POST,GET,DELETE,PUT")
 			w.Header().Set("Access-Control-Allow-Origin", origin)
 			w.Header().Set("Access-Control-Max-Age", "3600")
-			w.WriteHeader(http.StatusNoContent) // Mengirim response tanpa konten
-			return true                         // Mengembalikan true, menandakan preflight request ditangani
+			w.WriteHeader(http.StatusNoContent) 
+			return true                         
 		}
 		// Mengatur header CORS untuk request utama
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		w.Header().Set("Access-Control-Allow-Origin", origin)
-		return false // Mengembalikan false, menandakan request utama masih perlu ditangani lebih lanjut
+		return false 
 	}
-	return false // Mengembalikan false jika origin tidak diizinkan
+	return false 
 }
