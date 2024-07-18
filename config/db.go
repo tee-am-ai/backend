@@ -10,7 +10,7 @@ var MongoString string = os.Getenv("MONGOSTRING")
 
 var mongoinfo = helper.DBInfo{
 	DBString: MongoString,
-	DBName:   "db_chatteeamai",
+	DBName:   "db_teeamai",
 }
 
 var Mongoconn, ErrorMongoconn = helper.MongoConnect(mongoinfo)
