@@ -38,13 +38,7 @@ func permission(next http.Handler) http.Handler {
 	)
 }
 
-func home(w http.ResponseWriter, r *http.Request) {
-	resp := map[string]string{
-		"github_repo": "https://github.com/tee-am-ai/backend",
-		"message":     "Ampun puh sepuh, aku mah masih pemula 🙏",
-	}
-	helper.WriteJSON(w, http.StatusOK, resp)
-}
+
 
 func signUp(w http.ResponseWriter, r *http.Request) {
 	controller.SignUp(config.Mongoconn, "users", w, r)
