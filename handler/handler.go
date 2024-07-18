@@ -23,9 +23,9 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func LogIn(w http.ResponseWriter, r *http.Request) {
-	controller.LogIn(config.Mongoconn, w, r, os.Getenv("PASETOPRIVATEKEY"))
+	controller.LogIn(config.Mongoconn, w, r, os.Getenv("GO_PASETO_PRIVATE_KEY"))
 }
 
 func Chat(w http.ResponseWriter, r *http.Request) {
-	controller.Chat(w, r, os.Getenv("TOKENMODEL"))
+	controller.Chat(w, r, os.Getenv("GO_TOKEN_MODEL"))
 }
