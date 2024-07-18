@@ -20,8 +20,8 @@ func URL(w http.ResponseWriter, r *http.Request) {
 
 	var method, path string = r.Method, r.URL.Path
 	switch {
-	case method == "GET" && path == "/":
-		Home(w, r)
+	// case method == "GET" && path == "/":
+	// 	Home(w, r)
 	case method == "POST" && path == "/signup":
 		controller.SignUp(config.Mongoconn, "users", w, r)
 	case method == "POST" && path == "/login":
