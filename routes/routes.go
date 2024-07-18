@@ -1,8 +1,11 @@
 package routes
 
 import (
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/tee-am-ai/backend/handler"
+	"github.com/tee-am-ai/backend/helper"
 )
 
 func Router() *mux.Router {
@@ -15,4 +18,14 @@ func Router() *mux.Router {
 	r.HandleFunc("/chat", handler.Chat).Methods("POST")
 
 	return r
+}
+
+
+func Home(w http.ResponseWriter, r *http.Request) {
+	resp := map[string]string{
+		"github_repo": "https://github.com/tee-am-ai/backend",
+
+	}
+	
+	helper.WriteJSON(w, http.StatusOK, resp)
 }
