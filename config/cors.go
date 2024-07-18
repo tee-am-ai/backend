@@ -16,11 +16,11 @@ var Origins = []string{
 
 // Fungsi untuk memeriksa apakah origin diizinkan
 func isAllowedOrigin(origin string) bool {
-	for _, o := range Origins {
-		if o == origin {
-			return true
-		}
-	}
+	// for _, o := range Origins {
+	// 	if o == origin {
+	// 		return true
+	// 	}
+	// }
 	return false
 }
 
