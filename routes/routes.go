@@ -43,6 +43,3 @@ func permission(next http.Handler) http.Handler {
 
 
 
-func chat(w http.ResponseWriter, r *http.Request) {
-	controller.Chat(w, r, os.Getenv("HUGGINGFACE_API_KEY"))
-}
