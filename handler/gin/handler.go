@@ -22,3 +22,7 @@ func SignUp(c *gin.Context) {
 func LogIn(c *gin.Context) {
 	controller.LogIn(config.Mongoconn, c.Writer, c.Request, os.Getenv("PASETOPRIVATEKEY"))
 }
+
+func Chat(c *gin.Context) {
+	controller.Chat(c.Writer, c.Request, os.Getenv("TOKENMODEL"))
+}
