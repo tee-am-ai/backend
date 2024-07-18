@@ -12,10 +12,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"  // Package untuk mengatur opsi-opsi dalam operasi MongoDB
 )
 
+// DBInfo adalah struktur untuk menyimpan informasi koneksi database.
 type DBInfo struct {
-	DBString string
-	DBName   string
+	DBString string // DBString adalah string yang berisi informasi koneksi ke database, seperti URI atau alamat.
+	DBName   string // DBName adalah string yang menentukan nama database yang akan digunakan.
 }
+
 
 func MongoConnect(mconn DBInfo) (db *mongo.Database, err error) {
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(mconn.DBString))
