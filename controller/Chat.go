@@ -5,11 +5,11 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 	"time"
 
 	"github.com/go-resty/resty/v2"
-	"github.com/tee-am-ai/backend/config"
 	"github.com/tee-am-ai/backend/helper"
 	"github.com/tee-am-ai/backend/model"
 )
@@ -31,20 +31,20 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	client := resty.New()
 
 	// Hugging Face API URL dan token
-	apiUrl := config.GetEnv("HUGGINGFACE_API_KEY")
+	apiUrl := os.Getenv("HUGGINGFACE_API_KEY")
 	apiToken := "Bearer " + tokenmodel
 
 	var response *resty.Response
 	var retryCount int
 	maxRetries := 5
 	retryDelay := 20 * time.Second
-	
+
 	parsedURL, err := url.Parse(apiUrl)
 
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error parsing URL model hugging face"+err.Error())
-        return
-    }
+		return
+	}
 
 	segments := strings.Split(parsedURL.Path, "/")
 
@@ -67,7 +67,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		} else {
 			var errorResponse map[string]interface{}
 			err = json.Unmarshal(response.Body(), &errorResponse)
-			if err == nil && errorResponse["error"] == "Model " + modelName + " is currently loading" {
+			if err == nil && errorResponse["error"] == "Model "+modelName+" is currently loading" {
 				retryCount++
 				time.Sleep(retryDelay)
 				continue
