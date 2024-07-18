@@ -6,12 +6,10 @@ import (
 
 // MongoString adalah variabel untuk menyimpan string koneksi MongoDB yang didapatkan dari environment variable "MONGOSTRING".
 var MongoString string = GetEnv("MONGOSTRING")
-
 // mongoinfo adalah variabel untuk menyimpan informasi koneksi MongoDB seperti string koneksi dan nama database.
 var mongoinfo = helper.DBInfo{
 	DBString: MongoString,
-	DBName:   "db_teeamai",
+	DBName:   "db_team",
 }
-
 // Koneksi MongoDB diinisialisasi menggunakan fungsi MongoConnect yang mungkin didefinisikan di dalam package helper.
 var Mongoconn, ErrorMongoconn = helper.MongoConnect(mongoinfo)
