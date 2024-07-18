@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/tee-am-ai/backend/config"
-	controller "github.com/tee-am-ai/backend/controller"
+	"github.com/tee-am-ai/backend/controller"
 	"github.com/tee-am-ai/backend/helper"
 )
 
