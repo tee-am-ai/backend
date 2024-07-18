@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/tee-am-ai/backend/config"
+	"github.com/tee-am-ai/backend/helper"
 )
 
 func CorsMiddleware(next http.Handler) http.Handler {
@@ -13,6 +14,10 @@ func CorsMiddleware(next http.Handler) http.Handler {
 				return
 			}
 
+			if config.ErrorMongoconn != nil {
+				helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : database, "+config.ErrorMongoconn.Error())
+				return
+			}
 
 			next.ServeHTTP(w, r)
 		},
