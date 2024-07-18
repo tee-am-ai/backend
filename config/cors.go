@@ -28,7 +28,10 @@ func isAllowedOrigin(origin string) bool {
 func SetAccessControlHeaders(w http.ResponseWriter, r *http.Request) bool {
 	origin := r.Header.Get("Origin")
 
+	if isAllowedOrigin(origin) {
+		// Set CORS headers for the preflight request
 	
+	}
 
 	return false
 }
