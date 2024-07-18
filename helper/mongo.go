@@ -38,10 +38,10 @@ func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err err
 	filter := bson.M{"email": email}
 	err = collection.FindOne(context.TODO(), filter).Decode(&doc)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return doc, fmt.Errorf("email tidak ditemukan")
-		}
-		return doc, fmt.Errorf("kesalahan server")
+		// if err == mongo.ErrNoDocuments {
+		// 	return doc, fmt.Errorf("email tidak ditemukan")
+		// }
+		// return doc, fmt.Errorf("kesalahan server")
 	}
 	return doc, nil
 }
