@@ -16,6 +16,7 @@ func Router() *mux.Router {
 	r.Use(handler.CorsMiddleware)
 
 	r.HandleFunc("/", Home).Methods("GET")
+	r.HandleFunc("/signup", SignUp).Methods("POST")
 
 	return r
 }
