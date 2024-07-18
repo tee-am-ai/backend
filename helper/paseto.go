@@ -45,18 +45,29 @@ func Encode(id primitive.ObjectID, email, privateKey string) (string, error) {
 	return token.V4Sign(secretKey, nil), err
 }
 
+// Decode decodes a PASETO token string using a public key and returns the decoded payload.
+// It takes a public key in hexadecimal format (`publicKey string`) and a PASETO token string (`tokenstring string`).
+// It returns the decoded payload (`payload Payload`) and any error encountered during decoding.
 func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 	var token *paseto.Token
 	var pubKey paseto.V4AsymmetricPublicKey
-	pubKey, err = paseto.NewV4AsymmetricPublicKeyFromHex(publicKey) // this wil fail if given key in an invalid format
+
+	// Convert the provided public key from hexadecimal format to a paseto.V4AsymmetricPublicKey.
+	pubKey, err = paseto.NewV4AsymmetricPublicKeyFromHex(publicKey)
 	if err != nil {
-		return payload, fmt.Errorf("Decode NewV4AsymmetricPublicKeyFromHex : %v", err)
+		return payload, fmt.Errorf("Decode NewV4AsymmetricPublicKeyFromHex: %v", err)
 	}
-	parser := paseto.NewParser()                                // only used because this example token has expired, use NewParser() (which checks expiry by default)
-	token, err = parser.ParseV4Public(pubKey, tokenstring, nil) // this will fail if parsing failes, cryptographic checks fail, or validation rules fail
+
+	// Create a new PASETO token parser.
+	parser := paseto.NewParser()
+
+	// Parse the PASETO token using the public key.
+	token, err = parser.ParseV4Public(pubKey, tokenstring, nil)
 	if err != nil {
-		return payload, fmt.Errorf("Decode ParseV4Public : %v", err)
+		return payload, fmt.Errorf("Decode ParseV4Public: %v", err)
 	}
+
+	// Unmarshal the token's claims (payload) into the `payload` struct.
 	err = json.Unmarshal(token.ClaimsJSON(), &payload)
 	return payload, err
 }
