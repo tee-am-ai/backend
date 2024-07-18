@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"fmt"      // Package untuk formatting teks dan output
+	"net/http" // Package untuk melakukan operasi-operasi terkait HTTP seperti membuat server, mengirim permintaan, dan menerima respons HTTP
 
-	"github.com/tee-am-ai/backend/routes"
+	"github.com/tee-am-ai/backend/routes" // Package yang mungkin berisi definisi-definisi rute atau endpoint HTTP dalam aplikasi
 )
 
 func main() {
