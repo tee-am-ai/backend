@@ -41,9 +41,7 @@ func permission(next http.Handler) http.Handler {
 
 
 
-func logIn(w http.ResponseWriter, r *http.Request) {
-	controller.LogIn(config.Mongoconn, w, r, os.Getenv("PASETOPRIVATEKEY"))
-}
+
 
 func chat(w http.ResponseWriter, r *http.Request) {
 	controller.Chat(w, r, os.Getenv("HUGGINGFACE_API_KEY"))
