@@ -14,10 +14,7 @@ import (
 
 // LogIn adalah fungsi untuk menangani permintaan login pengguna.
 func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, privatekey string) {
-	// Deklarasi variabel untuk menyimpan data pengguna yang dikirimkan dalam body permintaan HTTP
 	var user model.User
-
-	// Menguraikan dan memasukkan data JSON dari body permintaan ke dalam struktur model.User
 	err := json.NewDecoder(req.Body).Decode(&user)
 	if err != nil {
 		// Jika terjadi kesalahan dalam parsing data, kirim respons dengan status Bad Request dan pesan kesalahan
@@ -50,8 +47,6 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
 		return
 	}
-
-	// Menggunakan argon2 untuk menghasilkan hash dari password yang diberikan
 	hash := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
 
 	// Membandingkan hasil hash dengan hash yang tersimpan di database
