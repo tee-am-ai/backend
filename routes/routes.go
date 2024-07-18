@@ -14,7 +14,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if config.ErrorMongoconn != nil {
-		helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : database, " + config.ErrorMongoconn.Error())
+		helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : database, "+config.ErrorMongoconn.Error())
 		return
 	}
 
@@ -36,7 +36,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 func Home(respw http.ResponseWriter, req *http.Request) {
 	resp := map[string]string{
 		"github_repo": "https://github.com/tee-am-ai/backend",
-		"message": "Ampun puh sepuh, aku mah masih pemula 🙏",
+		"message":     "Ampun puh sepuh, aku mah masih pemula 🙏",
 	}
 	helper.WriteJSON(respw, http.StatusOK, resp)
 }

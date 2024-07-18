@@ -25,7 +25,7 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	}
 
 	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data user")
 		return
 	}
 	if err := checkmail.ValidateFormat(user.Email); err != nil {
@@ -34,7 +34,7 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	}
 	userExists, _ := helper.GetUserFromEmail(user.Email, db)
 	if user.Email == userExists.Email {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email sudah terdaftar")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email sudah didaftarkan")
 		return
 	}
 	if strings.Contains(user.Password, " ") {
