@@ -1,18 +1,18 @@
 package controller
 
 import (
-	"crypto/rand"
-	"encoding/hex"
-	"encoding/json"
-	"net/http"
-	"strings"
+	"crypto/rand"   // Package untuk penggunaan fungsi random cryptographic
+	"encoding/hex"  // Package untuk encoding dan decoding dalam format hexadecimal
+	"encoding/json" // Package untuk encoding dan decoding dalam format JSON
+	"net/http"      // Package untuk melakukan operasi HTTP
+	"strings"       // Package untuk operasi manipulasi string
 
-	"github.com/badoux/checkmail"
-	"github.com/tee-am-ai/backend/helper"
-	model "github.com/tee-am-ai/backend/model"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"golang.org/x/crypto/argon2"
+	"github.com/badoux/checkmail"              // Package untuk validasi alamat email
+	"github.com/tee-am-ai/backend/helper"      // Package yang mungkin berisi fungsi bantuan (helper functions)
+	model "github.com/tee-am-ai/backend/model" // Package yang mungkin berisi definisi model data
+	"go.mongodb.org/mongo-driver/bson"         // Package untuk encoding dan decoding data dalam format BSON
+	"go.mongodb.org/mongo-driver/mongo"        // Package untuk melakukan operasi terkait MongoDB
+	"golang.org/x/crypto/argon2"               // Package untuk mengimplementasikan algoritma argon2 hashing
 )
 
 func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
