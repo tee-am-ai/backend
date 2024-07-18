@@ -25,6 +25,4 @@ func Router() *gin.Engine {
 
 
 
-func Chat(c *gin.Context) {
-	controller.Chat(c.Writer, c.Request, os.Getenv("TOKENMODEL"))
-}
+
