@@ -16,7 +16,12 @@ func main() {
 	}
 
 	r := routes.Router()
+
 	port := ":8080"
 	fmt.Println("Server started at: http://localhost" + port)
-	http.ListenAndServe(port, r)
+
+	err = http.ListenAndServe(port, r)
+	if err != nil {
+		log.Fatal("Server failed to start: ", err)
+	}
 }
