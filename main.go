@@ -1,9 +1,8 @@
 package teeamai
 
 import (
-	"github.com/tee-am-ai/backend/routes"
-
-	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
+	"github.com/GoogleCloudPlatform/functions-framework-go/functions" // Package yang mendukung pengembangan fungsi-fungsi cloud di Google Cloud Platform
+	"github.com/tee-am-ai/backend/routes"                             // Package yang mungkin berisi definisi-definisi rute atau endpoint HTTP dalam aplikasi
 )
 
 func init() {
