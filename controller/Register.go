@@ -2,6 +2,7 @@ package controller
 
 import (
 	"crypto/rand"
+	"encoding/hex"
 	"encoding/json"
 	"net/http"
 	"strings"
@@ -9,7 +10,9 @@ import (
 	"github.com/badoux/checkmail"
 	"github.com/tee-am-ai/backend/helper"
 	model "github.com/tee-am-ai/backend/model"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/argon2"
 )
 
 func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
@@ -48,13 +51,13 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
 		return
 	}
-	// hashedPassword := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
-	// userData := bson.M{
-	// 	"namalengkap": user.NamaLengkap,
-	// 	"email":       user.Email,
-	// 	"password":    hex.EncodeToString(hashedPassword),
-	// 	"salt":        hex.EncodeToString(salt),
-	// }
+	hashedPassword := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
+	userData := bson.M{
+		"namalengkap": user.NamaLengkap,
+		"email":       user.Email,
+		"password":    hex.EncodeToString(hashedPassword),
+		"salt":        hex.EncodeToString(salt),
+	}
 	insertedID, err := helper.InsertOneDoc(db, col, userData)
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
