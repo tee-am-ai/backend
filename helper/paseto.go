@@ -17,12 +17,7 @@ type Payload struct {
 	Nbf   time.Time          `json:"nbf"`
 }
 
-func Encode(id primitive.ObjectID, email, privateKey string) (string, error) {
-	
-	token.SetString("email", email)
-	secretKey, err := paseto.NewV4AsymmetricSecretKeyFromHex(privateKey)
-	return token.V4Sign(secretKey, nil), err
-}
+
 
 func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 	var token *paseto.Token
