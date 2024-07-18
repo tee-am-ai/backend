@@ -7,14 +7,14 @@ import (
 
 	"github.com/badoux/checkmail"
 	"github.com/tee-am-ai/backend/helper"
-	model "github.com/tee-am-ai/backend/model"
+	"github.com/tee-am-ai/backend/model"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/argon2"
 )
 
 func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, privatekey string) {
 	var user model.User
-	
+
 	err := json.NewDecoder(req.Body).Decode(&user)
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body " + err.Error())

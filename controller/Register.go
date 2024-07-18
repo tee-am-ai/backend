@@ -9,7 +9,7 @@ import (
 
 	"github.com/badoux/checkmail"
 	"github.com/tee-am-ai/backend/helper"
-	model "github.com/tee-am-ai/backend/model"
+	"github.com/tee-am-ai/backend/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/argon2"
@@ -78,6 +78,6 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 			"email": user.Email,
 		},
 	}
-	
+
 	helper.WriteJSON(respw, http.StatusCreated, resp)
 }
