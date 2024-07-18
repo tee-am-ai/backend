@@ -1,12 +1,14 @@
 package config
 
 import (
-	"os"
-	// "github.com/joho/godotenv"
+	"log"
+
+	"github.com/joho/godotenv"
 )
 
-func GetEnv(envName string) string {
-	// envFile, _ := godotenv.Read("../.env")
-	// return envFile[envName]
-	return os.Getenv(envName)
+func LoadEnv() {
+    err := godotenv.Load()
+    if err != nil {
+        log.Fatal("Error loading .env file")
+    }
 }
