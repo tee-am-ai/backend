@@ -21,12 +21,12 @@ type Password struct {
 	Confirmpassword string `bson:"confirmpass,omitempty" json:"confirmpass,omitempty"`
 }
 
-// type Ulasan struct {
-// 	NamaLengkap      string `bson:"namalengkap,omitempty" json:"namalengkap,omitempty"`
-// 	Email					   string `bson:"email,omitempty" json:"email,omitempty"`
-// 	Rating					 string `bson:"rating,omitempty" json:"rating,omitempty"`
-// 	Message					 string `bson:"message,omitempty" json:"message,omitempty"`
-// }
+type Ulasan struct {
+	NamaLengkap      string `bson:"namalengkap,omitempty" json:"namalengkap,omitempty"`
+	Email					   string `bson:"email,omitempty" json:"email,omitempty"`
+	Rating					 string `bson:"rating,omitempty" json:"rating,omitempty"`
+	Message					 string `bson:"message,omitempty" json:"message,omitempty"`
+}
 
 type AIRequest struct {
 	ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
