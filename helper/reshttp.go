@@ -7,12 +7,6 @@ import (
 )
 
 // ErrorResponse adalah fungsi untuk mengirim respons JSON yang berisi pesan kesalahan ke klien.
-// Fungsi ini memerlukan parameter:
-// - respw http.ResponseWriter: objek untuk menulis respons HTTP.
-// - req *http.Request: permintaan HTTP yang diterima.
-// - statusCode int: kode status HTTP yang akan dikirimkan (misalnya 400 untuk Bad Request).
-// - err string: jenis kesalahan yang terjadi.
-// - msg string: pesan terkait dengan kesalahan tersebut.
 func ErrorResponse(respw http.ResponseWriter, req *http.Request, statusCode int, err, msg string) {
 	// Menyiapkan respons JSON yang berisi informasi kesalahan
 	resp := map[string]string{
@@ -38,7 +32,10 @@ func WriteJSON(respw http.ResponseWriter, statusCode int, content any) {
 	respw.Write([]byte(jsonContent))
 }
 
-
+// Jsonstr converts any structure (`strc any`) into a JSON string representation.
+// It uses the encoding/json package to marshal the structure into JSON.
+// If marshaling fails, it logs the error and terminates the program.
+// It returns the JSON string representation of the structure.
 func Jsonstr(strc any) string {
 	jsonData, err := json.Marshal(strc)
 	if err != nil {
