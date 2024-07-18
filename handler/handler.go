@@ -3,6 +3,8 @@ package handler
 import (
 	"net/http"
 
+	"github.com/tee-am-ai/backend/config"
+	"github.com/tee-am-ai/backend/controller"
 	"github.com/tee-am-ai/backend/helper"
 )
 
@@ -15,3 +17,6 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	helper.WriteJSON(w, http.StatusOK, resp)
 }
 
+func SignUp(w http.ResponseWriter, r *http.Request) {
+	controller.SignUp(config.Mongoconn, "users", w, r)
+}
