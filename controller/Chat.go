@@ -15,22 +15,27 @@ import (
 )
 
 func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
+	// Deklarasi struktur untuk menyimpan data permintaan dari klien
 	var chat model.AIRequest
 
+	// Dekode data JSON dari body permintaan HTTP ke dalam struktur chat
 	err := json.NewDecoder(req.Body).Decode(&chat)
 	if err != nil {
+		// Jika terjadi kesalahan dalam dekode, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
 	}
 
+	// Memastikan bahwa query tidak kosong
 	if chat.Query == "" {
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
 		return
 	}
 
+	// Inisialisasi klien untuk melakukan permintaan HTTP dengan library resty
 	client := resty.New()
 
-	// Hugging Face API URL dan token
+	// Mendapatkan URL dan token API dari environment dan parameter fungsi
 	apiUrl := config.GetEnv("HUGGINGFACE_API_KEY")
 	apiToken := "Bearer " + tokenmodel
 
@@ -39,18 +44,17 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	maxRetries := 5
 	retryDelay := 20 * time.Second
 
+	// Parsing URL API Hugging Face
 	parsedURL, err := url.Parse(apiUrl)
-
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error parsing URL model hugging face"+err.Error())
 		return
 	}
 
 	segments := strings.Split(parsedURL.Path, "/")
-
 	modelName := strings.Join(segments[2:], "/")
 
-	// Request ke Hugging Face API
+	// Melakukan request ke Hugging Face API dengan mekanisme retry
 	for retryCount < maxRetries {
 		response, err = client.R().
 			SetHeader("Authorization", apiToken).
@@ -62,9 +66,11 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 			log.Fatalf("Error making request: %v", err)
 		}
 
+		// Memeriksa status kode respons dari Hugging Face API
 		if response.StatusCode() == http.StatusOK {
 			break
 		} else {
+			// Jika tidak berhasil dan error adalah model sedang dimuat, retry setelah delay
 			var errorResponse map[string]interface{}
 			err = json.Unmarshal(response.Body(), &errorResponse)
 			if err == nil && errorResponse["error"] == "Model "+modelName+" is currently loading" {
@@ -72,32 +78,38 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 				time.Sleep(retryDelay)
 				continue
 			}
+			// Jika tidak ada retry atau kesalahan lain, kirim respons dengan status Internal Server Error
 			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error from Hugging Face API "+string(response.Body()))
 			return
 		}
 	}
 
-	if response.StatusCode() != 200 {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Errorr", "error from Hugging Face API "+string(response.Body()))
+	// Jika status kode respons tidak 200 OK, kirim respons dengan status Internal Server Error
+	if response.StatusCode() != http.StatusOK {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error from Hugging Face API "+string(response.Body()))
 		return
 	}
 
+	// Dekode respons JSON dari Hugging Face API
 	var data []map[string]interface{}
-
 	err = json.Unmarshal(response.Body(), &data)
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error parsing response body "+err.Error())
 		return
 	}
 
+	// Memeriksa apakah ada data yang dihasilkan dari respons
 	if len(data) > 0 {
+		// Mengambil teks yang dihasilkan dari data JSON
 		generatedText, ok := data[0]["generated_text"].(string)
 		if !ok {
 			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error extracting generated text")
 			return
 		}
+		// Jika berhasil mendapatkan teks yang dihasilkan, kirim respons JSON dengan teks tersebut
 		helper.WriteJSON(respw, http.StatusOK, map[string]string{"answer": generatedText})
 	} else {
+		// Jika tidak ada data yang dihasilkan, kirim respons dengan status Internal Server Error
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: response")
 	}
 }
