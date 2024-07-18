@@ -26,3 +26,7 @@ func Home(c *gin.Context) {
 	})
 }
 
+func SignUp(c *gin.Context) {
+	controller.SignUp(config.Mongoconn, "users", c.Writer, c.Request)
+}
+
