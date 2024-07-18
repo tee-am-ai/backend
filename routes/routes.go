@@ -11,6 +11,7 @@ import (
 
 func Router() *mux.Router {
 	r := mux.NewRouter()
+	r.Use(permission)
 	r.HandleFunc("/", home).Methods("GET")
 	r.HandleFunc("/signup", signUp).Methods("POST")
 	r.HandleFunc("/login", logIn).Methods("POST")
