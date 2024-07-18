@@ -18,12 +18,15 @@ type DBInfo struct {
 	DBName   string // DBName adalah string yang menentukan nama database yang akan digunakan.
 }
 
-
 func MongoConnect(mconn DBInfo) (db *mongo.Database, err error) {
+	// Membuat koneksi ke MongoDB menggunakan string koneksi yang diberikan (mconn.DBString).
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(mconn.DBString))
 	if err != nil {
-		return nil, err
+		return nil, err // Mengembalikan nil dan error jika terjadi kesalahan saat koneksi.
 	}
+
+	// Mengembalikan objek *mongo.Database yang merepresentasikan database yang dipilih.
+	// Objek ini digunakan untuk melakukan operasi-operasi database di MongoDB.
 	return client.Database(mconn.DBName), nil
 }
 
