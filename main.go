@@ -1,11 +1,18 @@
-package teeamai
+package main
 
 import (
-	"github.com/tee-am-ai/backend/routes"
+	"fmt"
 
-	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
+	"github.com/tee-am-ai/backend/config"
+	"github.com/tee-am-ai/backend/routes"
 )
 
-func init() {
-	functions.HTTP("WebHook", routes.URL)
-}
+func main() {
+    config.LoadEnv()
+    r := routes.Router()
+
+    port := ":8080"
+    local := "http://localhost/" + port
+    fmt.Println("Server started at: ", local)
+
+} 
