@@ -18,6 +18,7 @@ func CorsMiddleware(next http.Handler) http.Handler {
 				helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : database, "+config.ErrorMongoconn.Error())
 				return
 			}
+
 			next.ServeHTTP(w, r)
 		},
 	)
