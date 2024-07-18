@@ -1,7 +1,7 @@
 package config
 
 import (
-	"net/http" // Mengimpor package net/http untuk menangani HTTP request dan response
+	"net/http"
 )
 
 // Mendeklarasikan slice Origins yang berisi daftar origin yang diizinkan
@@ -17,8 +17,8 @@ var Origins = []string{
 // Fungsi isAllowedOrigin memeriksa apakah origin yang diberikan diizinkan
 func isAllowedOrigin(origin string) bool {
 	for _, o := range Origins {
-		if o == origin { 
-			return true 
+		if o == origin {
+			return true
 		}
 	}
 	return false
@@ -28,20 +28,19 @@ func isAllowedOrigin(origin string) bool {
 func SetAccessControlHeaders(w http.ResponseWriter, r *http.Request) bool {
 	origin := r.Header.Get("Origin")
 
-	if isAllowedOrigin(origin) { 
-		if r.Method == http.MethodOptions { 
+	if isAllowedOrigin(origin) {
+		if r.Method == http.MethodOptions {
 			w.Header().Set("Access-Control-Allow-Credentials", "true")
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Login")
 			w.Header().Set("Access-Control-Allow-Methods", "POST,GET,DELETE,PUT")
 			w.Header().Set("Access-Control-Allow-Origin", origin)
 			w.Header().Set("Access-Control-Max-Age", "3600")
-			w.WriteHeader(http.StatusNoContent) 
-			return true                         
+			w.WriteHeader(http.StatusNoContent)
+			return true
 		}
-		// Mengatur header CORS untuk request utama
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		w.Header().Set("Access-Control-Allow-Origin", origin)
-		return false 
+		return false
 	}
-	return false 
+	return false
 }
