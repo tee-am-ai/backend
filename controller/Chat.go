@@ -9,19 +9,15 @@ import (
 	"time"          // Mengimpor paket time untuk bekerja dengan waktu
 
 	"github.com/go-resty/resty/v2"        // Mengimpor paket resty untuk membuat HTTP request dengan client yang lebih kaya fitur
-	"github.com/tee-am-ai/backend/config" // Mengimpor package config dari aplikasi backend
-	"github.com/tee-am-ai/backend/helper" // Mengimpor package helper dari aplikasi backend
-	"github.com/tee-am-ai/backend/model"  // Mengimpor package model dari aplikasi backend
+	"github.com/tee-am-ai/backend/config" // Mengimpor package config dari aplikasi backend bagian config
+	"github.com/tee-am-ai/backend/helper" // Mengimpor package helper dari aplikasi backend bagian helper
+	"github.com/tee-am-ai/backend/model"  // Mengimpor package model dari aplikasi backend bagian model
 )
 
 func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
-	// Deklarasi struktur untuk menyimpan data permintaan dari klien
 	var chat model.AIRequest
-
-	// Dekode data JSON dari body permintaan HTTP ke dalam struktur chat
 	err := json.NewDecoder(req.Body).Decode(&chat)
 	if err != nil {
-		// Jika terjadi kesalahan dalam dekode, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
 	}
