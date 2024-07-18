@@ -70,7 +70,6 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		if response.StatusCode() == http.StatusOK {
 			break
 		} else {
-			// Jika tidak berhasil dan error adalah model sedang dimuat, retry setelah delay
 			var errorResponse map[string]interface{}
 			err = json.Unmarshal(response.Body(), &errorResponse)
 			if err == nil && errorResponse["error"] == "Model "+modelName+" is currently loading" {
@@ -78,13 +77,10 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 				time.Sleep(retryDelay)
 				continue
 			}
-			// Jika tidak ada retry atau kesalahan lain, kirim respons dengan status Internal Server Error
 			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error from Hugging Face API "+string(response.Body()))
 			return
 		}
 	}
-
-	// Jika status kode respons tidak 200 OK, kirim respons dengan status Internal Server Error
 	if response.StatusCode() != http.StatusOK {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error from Hugging Face API "+string(response.Body()))
 		return
@@ -100,16 +96,13 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
 	// Memeriksa apakah ada data yang dihasilkan dari respons
 	if len(data) > 0 {
-		// Mengambil teks yang dihasilkan dari data JSON
 		generatedText, ok := data[0]["generated_text"].(string)
 		if !ok {
 			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error extracting generated text")
 			return
 		}
-		// Jika berhasil mendapatkan teks yang dihasilkan, kirim respons JSON dengan teks tersebut
 		helper.WriteJSON(respw, http.StatusOK, map[string]string{"answer": generatedText})
 	} else {
-		// Jika tidak ada data yang dihasilkan, kirim respons dengan status Internal Server Error
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: response")
 	}
 }
