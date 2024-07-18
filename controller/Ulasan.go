@@ -13,17 +13,20 @@ import (
 // Fungsi untuk menambahkan ulasan
 func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
 	var ulasan model.Ulasan
+
 	// Decode request body menjadi struct Ulasan
 	err := json.NewDecoder(req.Body).Decode(&ulasan)
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
 	}
+
 	// Validasi input
 	if ulasan.NamaLengkap == "" || ulasan.Email == "" || ulasan.Rating == "" || ulasan.Message == "" {
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
 		return
 	}
+
 	// Masukkan data ulasan ke database
 	ulasanData := bson.M{
 		"namalengkap": ulasan.NamaLengkap,
@@ -36,6 +39,7 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
 		return
 	}
+
 	// Response sukses
 	resp := map[string]any{
 		"message":    "ulasan berhasil ditambahkan",
@@ -43,6 +47,7 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 	}
 	helper.WriteJSON(respw, http.StatusCreated, resp)
 }
+
 // Fungsi untuk mendapatkan semua ulasan
 func GetAllUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
 	// Ambil semua data ulasan dari database
@@ -52,6 +57,7 @@ func GetAllUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get data, "+err.Error())
 		return
 	}
+
 	// Response dengan data ulasan
 	resp := map[string]any{
 		"message":  "berhasil mendapatkan ulasan",
