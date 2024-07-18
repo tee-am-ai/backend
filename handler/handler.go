@@ -27,5 +27,5 @@ func LogIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func Chat(w http.ResponseWriter, r *http.Request) {
-	controller.Chat(w, r, os.Getenv("HUGGINGFACE_API_KEY"))
+	controller.Chat(w, r, os.Getenv("TOKENMODEL"))
 }
