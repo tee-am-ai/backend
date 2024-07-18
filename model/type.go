@@ -1,9 +1,9 @@
 package model
 
 import (
-	"time"
+	"time" // Package untuk manipulasi waktu
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/bson/primitive" // Package untuk tipe data primitive dalam BSON
 )
 
 type User struct {
@@ -22,19 +22,18 @@ type Password struct {
 }
 
 type AIRequest struct {
-	ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
-	User 			User 			   `bson:"user,omitempty" json:"user,omitempty"`
-	Query   	    string             `bson:"query,omitempty" json:"query,omitempty"`
-	CreatedAt       time.Time          `bson:"created_at,omitempty" json:"created_at,omitempty"`
+	ID        primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	User      User               `bson:"user,omitempty" json:"user,omitempty"`
+	Query     string             `bson:"query,omitempty" json:"query,omitempty"`
+	CreatedAt time.Time          `bson:"created_at,omitempty" json:"created_at,omitempty"`
 }
 
 type AIResponse struct {
-	ID              primitive.ObjectID  `bson:"_id,omitempty" json:"_id,omitempty"`
-	AIRequest		AIRequest			`bson:"airequest,omitempty" json:"airequest,omitempty"`
-	Response  		string              `bson:"response,omitempty" json:"response,omitempty"`
-	CreatedAt 		time.Time           `bson:"created_at,omitempty" json:"created_at,omitempty"`
+	ID        primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	AIRequest AIRequest          `bson:"airequest,omitempty" json:"airequest,omitempty"`
+	Response  string             `bson:"response,omitempty" json:"response,omitempty"`
+	CreatedAt time.Time          `bson:"created_at,omitempty" json:"created_at,omitempty"`
 }
-
 
 type Credential struct {
 	Status  int    `json:"status" bson:"status"`
