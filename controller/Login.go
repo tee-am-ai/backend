@@ -13,9 +13,6 @@ import (
 )
 
 // LogIn adalah fungsi untuk menangani permintaan login pengguna.
-// Fungsi ini memerlukan akses ke database MongoDB (db *mongo.Database),
-// menanggapi permintaan HTTP (respw http.ResponseWriter, req *http.Request),
-// dan menggunakan kunci privat (privatekey string) untuk encoding token.
 func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, privatekey string) {
 	// Deklarasi variabel untuk menyimpan data pengguna yang dikirimkan dalam body permintaan HTTP
 	var user model.User
