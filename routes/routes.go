@@ -40,9 +40,6 @@ func permission(next http.Handler) http.Handler {
 
 
 
-func signUp(w http.ResponseWriter, r *http.Request) {
-	controller.SignUp(config.Mongoconn, "users", w, r)
-}
 
 func logIn(w http.ResponseWriter, r *http.Request) {
 	controller.LogIn(config.Mongoconn, w, r, os.Getenv("PASETOPRIVATEKEY"))
