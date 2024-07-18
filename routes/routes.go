@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/tee-am-ai/backend/config"
+	"github.com/tee-am-ai/backend/controller"
 	"github.com/tee-am-ai/backend/handler"
 	"github.com/tee-am-ai/backend/helper"
 )
@@ -13,7 +15,6 @@ func Router() *mux.Router {
 	r.Use(handler.CorsMiddleware)
 
 	r.HandleFunc("/", Home).Methods("GET")
-
 
 	return r
 }
@@ -27,3 +28,6 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	helper.WriteJSON(w, http.StatusOK, resp)
 }
 
+func SignUp(w http.ResponseWriter, r *http.Request) {
+	controller.SignUp(config.Mongoconn, "users", w, r)
+}
