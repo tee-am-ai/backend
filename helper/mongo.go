@@ -30,6 +30,10 @@ func MongoConnect(mconn DBInfo) (db *mongo.Database, err error) {
 	return client.Database(mconn.DBName), nil
 }
 
+// InsertOneDoc inserts a document into the specified MongoDB collection.
+// It takes a MongoDB database connection (`db *mongo.Database`), the name of the collection (`col string`),
+// and the document to be inserted (`doc any`).
+// It returns the inserted document's ID (`insertedID primitive.ObjectID`) and any error encountered.
 func InsertOneDoc(db *mongo.Database, col string, doc any) (insertedID primitive.ObjectID, err error) {
 	result, err := db.Collection(col).InsertOne(context.Background(), doc)
 	if err != nil {
@@ -38,6 +42,10 @@ func InsertOneDoc(db *mongo.Database, col string, doc any) (insertedID primitive
 	return result.InsertedID.(primitive.ObjectID), nil
 }
 
+// GetUserFromEmail retrieves a user document from the "users" collection in MongoDB based on the provided email address.
+// It takes the email address (`email string`) and the MongoDB database connection (`db *mongo.Database`).
+// It returns the retrieved user document (`doc model.User`) and any error encountered.
+// If the document is not found, it returns a specific error indicating "email tidak ditemukan".
 func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err error) {
 	collection := db.Collection("users")
 	filter := bson.M{"email": email}
