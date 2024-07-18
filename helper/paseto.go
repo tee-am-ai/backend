@@ -9,12 +9,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive" // Package untuk tipe data primitive dalam BSON
 )
 
+// Payload adalah struktur yang merepresentasikan payload token JWT.
 type Payload struct {
-	Id    primitive.ObjectID `json:"id"`
-	Email string             `json:"email"`
-	Exp   time.Time          `json:"exp"`
-	Iat   time.Time          `json:"iat"`
-	Nbf   time.Time          `json:"nbf"`
+	Id    primitive.ObjectID `json:"id"`    // Id adalah ID objek yang biasanya merupakan identitas unik dari entitas pengguna.
+	Email string             `json:"email"` // Email adalah alamat email terkait dengan payload.
+	Exp   time.Time          `json:"exp"`   // Exp adalah waktu kedaluwarsa (expiration time) dari token.
+	Iat   time.Time          `json:"iat"`   // Iat adalah waktu kapan token di-generate (issued at).
+	Nbf   time.Time          `json:"nbf"`   // Nbf adalah waktu kapan token mulai berlaku (not before).
 }
 
 func Encode(id primitive.ObjectID, email, privateKey string) (string, error) {
