@@ -12,6 +12,9 @@ import (
 func Router() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/", home).Methods("GET")
+	r.HandleFunc("/signup", signUp).Methods("POST")
+	r.HandleFunc("/login", logIn).Methods("POST")
+	r.HandleFunc("/chat", chat).Methods("POST")
 	return r
 }
 
