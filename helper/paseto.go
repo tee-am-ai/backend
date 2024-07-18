@@ -1,12 +1,12 @@
 package helper
 
 import (
-	"encoding/json"
-	"fmt"
-	"time"
+	"encoding/json" // Package untuk encoding dan decoding data dalam format JSON
+	"fmt"           // Package untuk formatting teks dan output
+	"time"          // Package untuk manipulasi waktu
 
-	"aidanwoods.dev/go-paseto"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"aidanwoods.dev/go-paseto"                   // Package untuk mengimplementasikan spesifikasi PASETO (Platform-Agnostic Security Tokens)
+	"go.mongodb.org/mongo-driver/bson/primitive" // Package untuk tipe data primitive dalam BSON
 )
 
 type Payload struct {
@@ -39,7 +39,7 @@ func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 	token, err = parser.ParseV4Public(pubKey, tokenstring, nil) // this will fail if parsing failes, cryptographic checks fail, or validation rules fail
 	if err != nil {
 		return payload, fmt.Errorf("Decode ParseV4Public : %v", err)
-	} 
+	}
 	err = json.Unmarshal(token.ClaimsJSON(), &payload)
 	return payload, err
 }
