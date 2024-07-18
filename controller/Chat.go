@@ -30,7 +30,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
 	client := resty.New()
 
-	apiUrl := os.Getenv("HUGGINGFACE_API_KEY")
+	apiUrl := os.Getenv("GO_HUGGING_FACE_API_KEY")
 	apiToken := "Bearer " + tokenmodel
 
 	var response *resty.Response
