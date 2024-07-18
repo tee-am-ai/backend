@@ -13,10 +13,10 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		return // If it's a preflight request, return early.
 	}
 
-	// if config.ErrorMongoconn != nil {
-	// 	helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : database, " + config.ErrorMongoconn.Error())
-	// 	return
-	// }
+	if config.ErrorMongoconn != nil {
+		helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : database, " + config.ErrorMongoconn.Error())
+		return
+	}
 
 	var method, path string = r.Method, r.URL.Path
 	switch {
