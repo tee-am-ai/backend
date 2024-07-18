@@ -38,13 +38,13 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	var retryCount int
 	maxRetries := 5
 	retryDelay := 20 * time.Second
-	
+
 	parsedURL, err := url.Parse(apiUrl)
 
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error parsing URL model hugging face"+err.Error())
-        return
-    }
+		return
+	}
 
 	segments := strings.Split(parsedURL.Path, "/")
 
@@ -67,7 +67,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		} else {
 			var errorResponse map[string]interface{}
 			err = json.Unmarshal(response.Body(), &errorResponse)
-			if err == nil && errorResponse["error"] == "Model " + modelName + " is currently loading" {
+			if err == nil && errorResponse["error"] == "Model "+modelName+" is currently loading" {
 				retryCount++
 				time.Sleep(retryDelay)
 				continue
