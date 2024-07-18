@@ -30,7 +30,6 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
 	client := resty.New()
 
-	// Hugging Face API URL dan token
 	apiUrl := os.Getenv("HUGGINGFACE_API_KEY")
 	apiToken := "Bearer " + tokenmodel
 
@@ -47,10 +46,8 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	}
 
 	segments := strings.Split(parsedURL.Path, "/")
-
 	modelName := strings.Join(segments[2:], "/")
 
-	// Request ke Hugging Face API
 	for retryCount < maxRetries {
 		response, err = client.R().
 			SetHeader("Authorization", apiToken).
@@ -64,6 +61,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
 		if response.StatusCode() == http.StatusOK {
 			break
+
 		} else {
 			var errorResponse map[string]interface{}
 			err = json.Unmarshal(response.Body(), &errorResponse)
@@ -96,7 +94,9 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error extracting generated text")
 			return
 		}
+		
 		helper.WriteJSON(respw, http.StatusOK, map[string]string{"answer": generatedText})
+
 	} else {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: response")
 	}
