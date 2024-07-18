@@ -25,13 +25,13 @@ func MongoConnect(mconn DBInfo) (db *mongo.Database, err error)  {
 	return client.Database(mconn.DBName), nil
 }
 
-// func InsertOneDoc(db *mongo.Database, col string, doc any) (insertedID primitive.ObjectID, err error) {
-// 	result, err := db.Collection(col).InsertOne(context.Background(), doc)
-// 	if err != nil {
-// 		return
-// 	}
-// 	return result.InsertedID.(primitive.ObjectID), nil
-// }
+func InsertOneDoc(db *mongo.Database, col string, doc any) (insertedID primitive.ObjectID, err error) {
+	result, err := db.Collection(col).InsertOne(context.Background(), doc)
+	if err != nil {
+		return
+	}
+	return result.InsertedID.(primitive.ObjectID), nil
+}
 
 func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err error) {
 	collection := db.Collection("users")
