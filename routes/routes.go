@@ -12,10 +12,12 @@ import (
 func Router() *mux.Router {
 	r := mux.NewRouter()
 	r.Use(permission)
+
 	r.HandleFunc("/", home).Methods("GET")
 	r.HandleFunc("/signup", signUp).Methods("POST")
 	r.HandleFunc("/login", logIn).Methods("POST")
 	r.HandleFunc("/chat", chat).Methods("POST")
+
 	return r
 }
 
@@ -23,7 +25,7 @@ func permission(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			if config.SetAccessControlHeaders(w, r) {
-				return // If it's a preflight request, return early.
+				return
 			}
 
 			if config.ErrorMongoconn != nil {
