@@ -1,11 +1,11 @@
 package routes
 
 import (
-	"net/http"
+	"net/http" // Package untuk melakukan operasi-operasi terkait HTTP seperti membuat server, mengirim permintaan, dan menerima respons HTTP
 
-	"github.com/tee-am-ai/backend/config"
-	controller "github.com/tee-am-ai/backend/controller"
-	"github.com/tee-am-ai/backend/helper"
+	"github.com/tee-am-ai/backend/config"                // Package yang mungkin berisi konfigurasi aplikasi
+	controller "github.com/tee-am-ai/backend/controller" // Package yang mungkin berisi definisi-definisi controller atau handler untuk mengelola permintaan HTTP
+	"github.com/tee-am-ai/backend/helper"                // Package yang mungkin berisi fungsi-fungsi bantuan (helper functions)
 )
 
 func URL(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +14,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if config.ErrorMongoconn != nil {
-		helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : database, " + config.ErrorMongoconn.Error())
+		helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : database, "+config.ErrorMongoconn.Error())
 		return
 	}
 
@@ -36,7 +36,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 func Home(respw http.ResponseWriter, req *http.Request) {
 	resp := map[string]string{
 		"github_repo": "https://github.com/tee-am-ai/backend",
-		"message": "Ampun puh sepuh, aku mah masih pemula 🙏",
+		"message":     "Ampun puh sepuh, aku mah masih pemula 🙏",
 	}
 	helper.WriteJSON(respw, http.StatusOK, resp)
 }
