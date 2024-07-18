@@ -11,11 +11,11 @@ import (
 
 func main() {
 	config.LoadEnv()
-
 	r := routes.Router()
 
 	port := ":8080"
-	fmt.Println("Server started at: http://localhost" + port)
+	local := "http://localhost" + port
+	fmt.Println("Server started at: ", local)
 
 	err := http.ListenAndServe(port, r)
 	if err != nil {
