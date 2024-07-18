@@ -8,9 +8,15 @@ import (
 )
 
 func main() {
-	// Menetapkan handler untuk route "/" ke fungsi URL dari package routes.
+	// Register the "/" route to the URL handler defined in routes package.
 	http.HandleFunc("/", routes.URL)
+
+	// Define the port for the server to listen on.
 	port := ":8080"
+
+	// Print a message indicating the server has started.
 	fmt.Println("Server started at: http://localhost" + port)
+
+	// Start the HTTP server and listen on the specified port.
 	http.ListenAndServe(port, nil)
 }
