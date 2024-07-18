@@ -13,10 +13,11 @@ func Router() *mux.Router {
 	return r
 }
 
-func Home(respw http.ResponseWriter, req *http.Request) {
+func Home(w http.ResponseWriter, r *http.Request) {
 	resp := map[string]string{
 		"github_repo": "https://github.com/tee-am-ai/backend",
 		"message":     "Ampun puh sepuh, aku mah masih pemula 🙏",
 	}
-	helper.WriteJSON(respw, http.StatusOK, resp)
+	helper.WriteJSON(w, http.StatusOK, resp)
 }
+
