@@ -2,6 +2,7 @@ package routes
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/tee-am-ai/backend/config"
@@ -30,4 +31,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
 	controller.SignUp(config.Mongoconn, "users", w, r)
+}
+
+func LogIn(w http.ResponseWriter, r *http.Request) {
+	controller.LogIn(config.Mongoconn, w, r, os.Getenv("PASETOPRIVATEKEY"))
 }
