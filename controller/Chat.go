@@ -1,17 +1,17 @@
 package controller
 
 import (
-	"encoding/json"
-	"log"
-	"net/http"
-	"net/url"
-	"strings"
-	"time"
+	"encoding/json" // Mengimpor paket encoding/json untuk bekerja dengan JSON
+	"log"           // Mengimpor paket log untuk logging
+	"net/http"      // Mengimpor paket net/http untuk menangani HTTP request dan response
+	"net/url"       // Mengimpor paket net/url untuk bekerja dengan URL
+	"strings"       // Mengimpor paket strings untuk manipulasi string
+	"time"          // Mengimpor paket time untuk bekerja dengan waktu
 
-	"github.com/go-resty/resty/v2"
-	"github.com/tee-am-ai/backend/config"
-	"github.com/tee-am-ai/backend/helper"
-	"github.com/tee-am-ai/backend/model"
+	"github.com/go-resty/resty/v2"        // Mengimpor paket resty untuk membuat HTTP request dengan client yang lebih kaya fitur
+	"github.com/tee-am-ai/backend/config" // Mengimpor package config dari aplikasi backend
+	"github.com/tee-am-ai/backend/helper" // Mengimpor package helper dari aplikasi backend
+	"github.com/tee-am-ai/backend/model"  // Mengimpor package model dari aplikasi backend
 )
 
 func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
@@ -38,13 +38,13 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	var retryCount int
 	maxRetries := 5
 	retryDelay := 20 * time.Second
-	
+
 	parsedURL, err := url.Parse(apiUrl)
 
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error parsing URL model hugging face"+err.Error())
-        return
-    }
+		return
+	}
 
 	segments := strings.Split(parsedURL.Path, "/")
 
@@ -67,7 +67,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		} else {
 			var errorResponse map[string]interface{}
 			err = json.Unmarshal(response.Body(), &errorResponse)
-			if err == nil && errorResponse["error"] == "Model " + modelName + " is currently loading" {
+			if err == nil && errorResponse["error"] == "Model "+modelName+" is currently loading" {
 				retryCount++
 				time.Sleep(retryDelay)
 				continue
