@@ -20,9 +20,9 @@ func SignUp(c *gin.Context) {
 }
 
 func LogIn(c *gin.Context) {
-	controller.LogIn(config.Mongoconn, c.Writer, c.Request, os.Getenv("PASETOPRIVATEKEY"))
+	controller.LogIn(config.Mongoconn, c.Writer, c.Request, os.Getenv("GO_PASETO_PUBLIC_KEY"))
 }
 
 func Chat(c *gin.Context) {
-	controller.Chat(c.Writer, c.Request, os.Getenv("TOKENMODEL"))
+	controller.Chat(c.Writer, c.Request, os.Getenv("GO_TOKEN_MODEL"))
 }
