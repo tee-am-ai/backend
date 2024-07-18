@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/tee-am-ai/backend/config"
 	"github.com/tee-am-ai/backend/controller"
@@ -19,4 +20,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
 	controller.SignUp(config.Mongoconn, "users", w, r)
+}
+
+func LogIn(w http.ResponseWriter, r *http.Request) {
+	controller.LogIn(config.Mongoconn, w, r, os.Getenv("PASETOPRIVATEKEY"))
 }
