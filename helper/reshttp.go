@@ -11,6 +11,7 @@ func ErrorResponse(respw http.ResponseWriter, req *http.Request, statusCode int,
 		"error":   err,
 		"message": msg,
 	}
+
 	WriteJSON(respw, statusCode, resp)
 }
 
@@ -25,5 +26,6 @@ func Jsonstr(strc any) string {
 	if err != nil {
 		log.Fatal(err)
 	}
+	
 	return string(jsonData)
 }
