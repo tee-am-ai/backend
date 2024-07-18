@@ -1,9 +1,9 @@
 package helper
 
 import (
-	"encoding/json"
-	"log"
-	"net/http"
+	"encoding/json" // Package untuk encoding dan decoding data dalam format JSON
+	"log"           // Package untuk logging, digunakan untuk mencatat informasi atau kesalahan ke konsol atau file log
+	"net/http"      // Package untuk melakukan operasi-operasi terkait HTTP seperti membuat server, mengirim permintaan, dan menerima respons
 )
 
 func ErrorResponse(respw http.ResponseWriter, req *http.Request, statusCode int, err, msg string) {
