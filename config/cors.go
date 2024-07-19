@@ -40,8 +40,8 @@ func SetAccessControlHeaders(w http.ResponseWriter, r *http.Request) bool {
 			return true
 		}
 		// Set CORS headers for the main request.
-		// w.Header().Set("Access-Control-Allow-Credentials", "true")
-		// w.Header().Set("Access-Control-Allow-Origin", origin)
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		w.Header().Set("Access-Control-Allow-Origin", origin)
 		return false
 	}
 
