@@ -29,12 +29,12 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 		return
 	}
 	if err := checkmail.ValidateFormat(user.Email); err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email anda tidak valid")
 		return
 	}
 	userExists, _ := helper.GetUserFromEmail(user.Email, db)
 	if user.Email == userExists.Email {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email sudah terdaftar")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email anda sudah terdaftar")
 		return
 	}
 	if strings.Contains(user.Password, " ") {
@@ -64,7 +64,7 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 		return
 	}
 	resp := map[string]any{
-		"message":    "berhasil mendaftar",
+		"message":    "anda berhasil mendaftar",
 		"insertedID": insertedID,
 		"data": map[string]string{
 			"email": user.Email,
