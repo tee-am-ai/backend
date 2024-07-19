@@ -46,8 +46,6 @@ func Encode(id primitive.ObjectID, email, privateKey string) (string, error) {
 }
 
 // Decode decodes a PASETO token string using a public key and returns the decoded payload.
-// It takes a public key in hexadecimal format (`publicKey string`) and a PASETO token string (`tokenstring string`).
-// It returns the decoded payload (`payload Payload`) and any error encountered during decoding.
 func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 	var token *paseto.Token
 	var pubKey paseto.V4AsymmetricPublicKey
