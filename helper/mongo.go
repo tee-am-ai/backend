@@ -31,9 +31,6 @@ func MongoConnect(mconn DBInfo) (db *mongo.Database, err error) {
 }
 
 // InsertOneDoc inserts a document into the specified MongoDB collection.
-// It takes a MongoDB database connection (`db *mongo.Database`), the name of the collection (`col string`),
-// and the document to be inserted (`doc any`).
-// It returns the inserted document's ID (`insertedID primitive.ObjectID`) and any error encountered.
 func InsertOneDoc(db *mongo.Database, col string, doc any) (insertedID primitive.ObjectID, err error) {
 	result, err := db.Collection(col).InsertOne(context.Background(), doc)
 	if err != nil {
@@ -43,9 +40,6 @@ func InsertOneDoc(db *mongo.Database, col string, doc any) (insertedID primitive
 }
 
 // GetUserFromEmail retrieves a user document from the "users" collection in MongoDB based on the provided email address.
-// It takes the email address (`email string`) and the MongoDB database connection (`db *mongo.Database`).
-// It returns the retrieved user document (`doc model.User`) and any error encountered.
-// If the document is not found, it returns a specific error indicating "email tidak ditemukan".
 func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err error) {
 	collection := db.Collection("users")
 	filter := bson.M{"email": email}
@@ -59,18 +53,32 @@ func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err err
 	return doc, nil
 }
 
+// GetAllDocs adalah fungsi generik yang mengambil semua dokumen dari koleksi MongoDB berdasarkan filter yang diberikan
 func GetAllDocs[T any](db *mongo.Database, col string, filter bson.M) (docs T, err error) {
+	// Membuat context tanpa batas waktu (timeout)
 	ctx := context.TODO()
+
+	// Mendapatkan koleksi dari database berdasarkan nama koleksi yang diberikan
 	collection := db.Collection(col)
+
+	// Mencari dokumen dalam koleksi berdasarkan filter yang diberikan
 	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
+		// Jika terjadi kesalahan saat pencarian, kembalikan nilai error
 		return
 	}
+
+	// Menutup cursor setelah selesai digunakan
 	defer cursor.Close(ctx)
+
+	// Menyalin semua dokumen yang ditemukan ke dalam variabel docs
 	err = cursor.All(context.TODO(), &docs)
 	if err != nil {
+		// Jika terjadi kesalahan saat penyalinan, kembalikan nilai error
 		return
 	}
+
+	// Mengembalikan dokumen yang ditemukan dan nil
 	return
 }
 
