@@ -15,7 +15,6 @@ import (
 	"golang.org/x/crypto/argon2"               // Package untuk mengimplementasikan algoritma argon2 hashing
 )
 
-// SignUp adalah fungsi untuk menangani permintaan pendaftaran pengguna baru.
 func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
 	var user model.User
 	err := json.NewDecoder(req.Body).Decode(&user)
@@ -23,8 +22,6 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
 	}
-
-	// Memastikan bahwa semua field yang diperlukan untuk pendaftaran diisi dengan benar
 	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
 		return
@@ -88,7 +85,5 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 			"email": user.Email,
 		},
 	}
-
-	// Mengirimkan respons dalam format JSON dengan status Created (201)
 	helper.WriteJSON(respw, http.StatusCreated, resp)
 }
