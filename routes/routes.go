@@ -44,13 +44,13 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Home(respw http.ResponseWriter, req *http.Request) {
-	// Mendefinisikan sebuah map yang berisi informasi repository GitHub dan pesan.
-	resp := map[string]string{
-		"github_repo": "https://github.com/tee-am-ai/backend",
-		"message":     "Ampun puh sepuh, aku mah masih pemula 🙏",
-	}
+// func Home(respw http.ResponseWriter, req *http.Request) {
+// 	// Mendefinisikan sebuah map yang berisi informasi repository GitHub dan pesan.
+// 	resp := map[string]string{
+// 		"github_repo": "https://github.com/tee-am-ai/backend",
+// 		"message":     "Ampun puh sepuh, aku mah masih pemula 🙏",
+// 	}
 
-	// Memanggil fungsi WriteJSON dari package helper untuk menulis respons JSON.
-	helper.WriteJSON(respw, http.StatusOK, resp)
-}
+// 	// Memanggil fungsi WriteJSON dari package helper untuk menulis respons JSON.
+// 	helper.WriteJSON(respw, http.StatusOK, resp)
+// }
