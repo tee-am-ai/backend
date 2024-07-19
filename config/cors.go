@@ -1,5 +1,6 @@
 package config
 
+// Mengimpor paket "net/http" dari standar library Go.
 import (
 	"net/http"
 )
