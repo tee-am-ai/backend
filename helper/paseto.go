@@ -72,9 +72,17 @@ func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 	return payload, err
 }
 
+// GenerateKey adalah fungsi yang menghasilkan kunci privat dan kunci publik menggunakan Paseto V4
 func GenerateKey() (privateKey, publicKey string) {
-	secretKey := paseto.NewV4AsymmetricSecretKey() // don't share this!!!
-	publicKey = secretKey.Public().ExportHex()     // DO share this one
+	// Membuat kunci privat menggunakan Paseto V4 Asymmetric Secret Key
+	secretKey := paseto.NewV4AsymmetricSecretKey() // jangan bagikan kunci ini!!!
+
+	// Mengekspor kunci publik dari kunci privat dalam format hex
+	publicKey = secretKey.Public().ExportHex() // Bagikan kunci publik ini
+
+	// Mengekspor kunci privat dalam format hex
 	privateKey = secretKey.ExportHex()
+
+	// Mengembalikan kunci privat dan kunci publik sebagai string hex
 	return privateKey, publicKey
 }
