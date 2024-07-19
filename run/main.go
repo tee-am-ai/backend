@@ -7,9 +7,9 @@ import (
 	"github.com/tee-am-ai/backend/routes"
 )
 
-func main() {
-	http.HandleFunc("/", routes.URL)
-	port := ":8080"
-	fmt.Println("Server started at: http://localhost" + port)
-	http.ListenAndServe(port, nil)
-}
+// func main() {
+// 	http.HandleFunc("/", routes.URL)
+// 	port := ":8080"
+// 	fmt.Println("Server started at: http://localhost" + port)
+// 	http.ListenAndServe(port, nil)
+// }
