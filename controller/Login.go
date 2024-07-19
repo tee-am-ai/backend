@@ -61,8 +61,6 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : token")
 		return
 	}
-
-	// Persiapan respons yang akan dikirimkan kembali kepada klien
 	resp := map[string]interface{}{
 		"status":  "success",
 		"message": "login berhasil",
@@ -72,7 +70,5 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 			"namalengkap": existsDoc.NamaLengkap,
 		},
 	}
-
-	// Mengirimkan respons dalam format JSON dengan status OK (200)
 	helper.WriteJSON(respw, http.StatusOK, resp)
 }
