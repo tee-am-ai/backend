@@ -15,20 +15,29 @@ import (
 	"golang.org/x/crypto/argon2"               // Package untuk mengimplementasikan algoritma argon2 hashing
 )
 
+// SignUp adalah handler fungsi untuk menangani permintaan pendaftaran pengguna baru.
 func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
+	// Mendeklarasikan variabel user sebagai tipe model.User
 	var user model.User
+
+	// Mendekode body permintaan JSON ke dalam variabel user
 	err := json.NewDecoder(req.Body).Decode(&user)
 	if err != nil {
+		// Jika terjadi kesalahan dalam parsing data, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
 	}
+
+	// Memastikan bahwa NamaLengkap, Email, Password, dan Confirmpassword tidak kosong
 	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
+		// Jika ada data yang kosong, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
 		return
 	}
 
 	// Validasi format email menggunakan package checkmail
 	if err := checkmail.ValidateFormat(user.Email); err != nil {
+		// Jika format email tidak valid, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
 		return
 	}
@@ -36,18 +45,21 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	// Memeriksa apakah email sudah terdaftar di dalam database
 	userExists, _ := helper.GetUserFromEmail(user.Email, db)
 	if user.Email == userExists.Email {
+		// Jika email sudah terdaftar, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email sudah terdaftar")
 		return
 	}
 
 	// Memeriksa apakah password mengandung spasi
 	if strings.Contains(user.Password, " ") {
+		// Jika password mengandung spasi, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password tidak boleh mengandung spasi")
 		return
 	}
 
 	// Memeriksa panjang password minimal 8 karakter
 	if len(user.Password) < 8 {
+		// Jika password kurang dari 8 karakter, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password minimal 8 karakter")
 		return
 	}
@@ -56,9 +68,11 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	salt := make([]byte, 16)
 	_, err = rand.Read(salt)
 	if err != nil {
+		// Jika terjadi kesalahan saat membuat salt, kirim respons dengan status Internal Server Error dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
 		return
 	}
+
 	// Menggunakan argon2 untuk menghasilkan hash dari password yang diberikan menggunakan salt yang dibuat
 	hashedPassword := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
 
@@ -73,6 +87,7 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	// Memasukkan data pengguna ke dalam database menggunakan fungsi bantuan InsertOneDoc
 	insertedID, err := helper.InsertOneDoc(db, col, userData)
 	if err != nil {
+		// Jika terjadi kesalahan saat menyimpan data ke database, kirim respons dengan status Internal Server Error dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
 		return
 	}
@@ -85,5 +100,6 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 			"email": user.Email,
 		},
 	}
+	// Mengirimkan respons dalam format JSON dengan status Created (201)
 	helper.WriteJSON(respw, http.StatusCreated, resp)
 }
