@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -51,6 +52,15 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
 	// Request ke Hugging Face API
 	for retryCount < maxRetries {
+		response, err = client.R().
+			SetHeader("Authorization", apiToken).
+			SetHeader("Content-Type", "application/json").
+			SetBody(`{"inputs": "` + chat.Query + `"}`).
+			Post(apiUrl)
+
+		if err != nil {
+			log.Fatalf("Error making request: %v", err)
+		}
 
 		if response.StatusCode() == http.StatusOK {
 			break
