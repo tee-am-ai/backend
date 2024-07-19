@@ -6,6 +6,5 @@ import (
 )
 
 func init() {
-	// Menggunakan fungsi HTTP dari functions-framework-go untuk mendaftarkan handler HTTP.
 	functions.HTTP("WebHook", routes.URL)
 }
