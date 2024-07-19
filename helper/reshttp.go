@@ -6,16 +6,16 @@ import (
 	"net/http"      // Package untuk melakukan operasi-operasi terkait HTTP seperti membuat server, mengirim permintaan, dan menerima respons
 )
 
-func ErrorResponse(respw http.ResponseWriter, req *http.Request, statusCode int, err, msg string) {
-	// Menyiapkan respons JSON yang berisi informasi kesalahan
-	resp := map[string]string{
-		"error":   err,
-		"message": msg,
-	}
+// func ErrorResponse(respw http.ResponseWriter, req *http.Request, statusCode int, err, msg string) {
+// 	// Menyiapkan respons JSON yang berisi informasi kesalahan
+// 	resp := map[string]string{
+// 		"error":   err,
+// 		"message": msg,
+// 	}
 
-	// Memanggil fungsi WriteJSON untuk menulis respons dalam format JSON dengan kode status yang sesuai
-	WriteJSON(respw, statusCode, resp)
-}
+// 	// Memanggil fungsi WriteJSON untuk menulis respons dalam format JSON dengan kode status yang sesuai
+// 	WriteJSON(respw, statusCode, resp)
+// }
 
 func WriteJSON(respw http.ResponseWriter, statusCode int, content any) {
 	// Mengatur header untuk menetapkan jenis konten sebagai application/json.
