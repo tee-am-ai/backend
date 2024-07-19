@@ -4,11 +4,11 @@ import (
 	"github.com/tee-am-ai/backend/helper"
 )
 
-var MongoString string = GetEnv("MONGO_STRING")
+var MongoString string = GetEnv("MONGOSTRING")
 
 var mongoinfo = helper.DBInfo{
 	DBString: MongoString,
-	DBName:   "db_teeamaiii",
+	DBName:   "db_teeamai",
 }
 
 var Mongoconn, ErrorMongoconn = helper.MongoConnect(mongoinfo)
