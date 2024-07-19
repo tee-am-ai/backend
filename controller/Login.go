@@ -21,11 +21,11 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 		return
 	}
 	if user.Email == "" || user.Password == "" {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data anda")
 		return
 	}
 	if err = checkmail.ValidateFormat(user.Email); err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email anda tidak valid")
 		return
 	}
 	existsDoc, err := helper.GetUserFromEmail(user.Email, db)
@@ -50,7 +50,7 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 	}
 	resp := map[string]any{
 		"status":  "success",
-		"message": "login berhasil",
+		"message": "selamat datang login anda berhasil",
 		"token":   tokenstring,
 		"data" : map[string]string{
 			"email": existsDoc.Email,
