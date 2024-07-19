@@ -1,6 +1,8 @@
 package helper
 
 import (
+	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -18,3 +20,10 @@ func WriteJSON(respw http.ResponseWriter, statusCode int, content any) {
 	respw.Write([]byte(Jsonstr(content)))
 }
 
+func Jsonstr(strc any) string {
+	jsonData, err := json.Marshal(strc)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return string(jsonData)
+}
