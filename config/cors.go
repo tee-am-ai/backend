@@ -26,20 +26,6 @@ func isAllowedOrigin(origin string) bool {
 }
 
 // Fungsi SetAccessControlHeaders mengatur header CORS untuk HTTP response
-// SetAccessControlHeaders sets CORS (Cross-Origin Resource Sharing) headers on the HTTP response.
-// It takes the HTTP response writer (`w http.ResponseWriter`) and the HTTP request (`r *http.Request`).
-// It checks if the origin (`r.Header.Get("Origin")`) is allowed by calling `isAllowedOrigin`.
-// If the origin is allowed:
-// - For OPTIONS requests (`r.Method == http.MethodOptions`), it sets specific CORS headers:
-//   - Access-Control-Allow-Credentials: true
-//   - Access-Control-Allow-Headers: Content-Type, Login
-//   - Access-Control-Allow-Methods: POST, GET, DELETE, PUT
-//   - Access-Control-Allow-Origin: the origin received in the request
-//   - Access-Control-Max-Age: 3600 (1 hour) to cache preflight response
-//   - It writes a StatusNoContent (204) response header and returns true.
-//
-// - For other HTTP methods, it sets Access-Control-Allow-Credentials and Access-Control-Allow-Origin headers.
-// - If the origin is not allowed, it returns false.
 func SetAccessControlHeaders(w http.ResponseWriter, r *http.Request) bool {
 	origin := r.Header.Get("Origin")
 
