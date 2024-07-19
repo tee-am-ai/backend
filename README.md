@@ -12,7 +12,7 @@ go run main.go
 
 Ini adalah repositori backend untuk proyek Anda. Instruksi di bawah ini akan membantu Anda mengatur dan menjalankan aplikasi backend.
 
-## Prasyarat
+## Syarat
 
 Pastikan Anda telah menginstal hal-hal berikut:
 
@@ -21,9 +21,9 @@ Pastikan Anda telah menginstal hal-hal berikut:
 
 ## Instalasi
 
-1. Klon repositori ini ke direktori lokal Anda:
+Klon repositori ini ke direktori lokal Anda:
 
-   ```sh
-   git clone https://github.com/username/repo-name.git
-   cd repo-name
-   ```
+```sh
+git clone https://github.com/username/repo-name.git
+cd repo-name
+```
