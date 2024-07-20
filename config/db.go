@@ -1,13 +1,14 @@
 package config
 
 import (
-	"github.com/tee-am-ai/backend/helper" // Package yang mungkin berisi fungsi-fungsi bantuan terkait konfigurasi atau pengaturan
+	"os"
+
+	"github.com/tee-am-ai/backend/helper"
 )
 
-var MongoString string = GetEnv("MONGOSTRING")
-
 var mongoinfo = helper.DBInfo{
-	DBString: MongoString,
-	DBName:   "db_teamai",
+	DBString: os.Getenv("GO_MONGO_STRING"),
+	DBName:   "db_teeamai",
 }
+
 var Mongoconn, ErrorMongoconn = helper.MongoConnect(mongoinfo)
