@@ -8,10 +8,10 @@ import (
 	"github.com/tee-am-ai/backend/helper"
 )
 
-func URL(w http.ResponseWriter, r *http.Request) {
-	if config.SetAccessControlHeaders(w, r) {
-		return // If it's a preflight request, return early.
-	}
+// func URL(w http.ResponseWriter, r *http.Request) {
+// 	if config.SetAccessControlHeaders(w, r) {
+// 		return // If it's a preflight request, return early.
+// 	}
 
 	// if config.ErrorMongoconn != nil {
 	// 	helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : database, " + config.ErrorMongoconn.Error())
