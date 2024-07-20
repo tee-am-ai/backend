@@ -1,82 +1,63 @@
 package controller
 
 import (
-	"crypto/rand"   // Package untuk penggunaan fungsi random cryptographic
-	"encoding/hex"  // Package untuk encoding dan decoding dalam format hexadecimal
-	"encoding/json" // Package untuk encoding dan decoding dalam format JSON
-	"net/http"      // Package untuk melakukan operasi HTTP
-	"strings"       // Package untuk operasi manipulasi string
+	"crypto/rand"
+	"encoding/hex"
+	"encoding/json"
+	"net/http"
+	"strings"
 
-	"github.com/badoux/checkmail"              // Package untuk validasi alamat email
-	"github.com/tee-am-ai/backend/helper"      // Package yang mungkin berisi fungsi bantuan (helper functions)
-	model "github.com/tee-am-ai/backend/model" // Package yang mungkin berisi definisi model data
-	"go.mongodb.org/mongo-driver/bson"         // Package untuk encoding dan decoding data dalam format BSON
-	"go.mongodb.org/mongo-driver/mongo"        // Package untuk melakukan operasi terkait MongoDB
-	"golang.org/x/crypto/argon2"               // Package untuk mengimplementasikan algoritma argon2 hashing
+	"github.com/badoux/checkmail"
+	"github.com/tee-am-ai/backend/helper"
+	"github.com/tee-am-ai/backend/model"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/argon2"
 )
 
-// SignUp adalah handler fungsi untuk menangani permintaan pendaftaran pengguna baru.
 func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
-	// Mendeklarasikan variabel user sebagai tipe model.User
 	var user model.User
 
-	// Mendekode body permintaan JSON ke dalam variabel user
 	err := json.NewDecoder(req.Body).Decode(&user)
 	if err != nil {
-		// Jika terjadi kesalahan dalam parsing data, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
 	}
 
-	// Memastikan bahwa NamaLengkap, Email, Password, dan Confirmpassword tidak kosong
 	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
-		// Jika ada data yang kosong, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
 		return
 	}
 
-	// Validasi format email menggunakan package checkmail
 	if err := checkmail.ValidateFormat(user.Email); err != nil {
-		// Jika format email tidak valid, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
 		return
 	}
 
-	// Memeriksa apakah email sudah terdaftar di dalam database
 	userExists, _ := helper.GetUserFromEmail(user.Email, db)
 	if user.Email == userExists.Email {
-		// Jika email sudah terdaftar, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email sudah terdaftar")
 		return
 	}
 
-	// Memeriksa apakah password mengandung spasi
 	if strings.Contains(user.Password, " ") {
-		// Jika password mengandung spasi, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password tidak boleh mengandung spasi")
 		return
 	}
 
-	// Memeriksa panjang password minimal 8 karakter
 	if len(user.Password) < 8 {
-		// Jika password kurang dari 8 karakter, kirim respons dengan status Bad Request dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password minimal 8 karakter")
 		return
 	}
 
-	// Membuat salt acak untuk digunakan dalam proses hashing password
 	salt := make([]byte, 16)
 	_, err = rand.Read(salt)
 	if err != nil {
-		// Jika terjadi kesalahan saat membuat salt, kirim respons dengan status Internal Server Error dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
 		return
 	}
 
-	// Menggunakan argon2 untuk menghasilkan hash dari password yang diberikan menggunakan salt yang dibuat
 	hashedPassword := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
-
-	// Menyiapkan data pengguna yang akan disimpan di dalam database MongoDB
 	userData := bson.M{
 		"namalengkap": user.NamaLengkap,
 		"email":       user.Email,
@@ -84,22 +65,19 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 		"salt":        hex.EncodeToString(salt),
 	}
 
-	// Memasukkan data pengguna ke dalam database menggunakan fungsi bantuan InsertOneDoc
 	insertedID, err := helper.InsertOneDoc(db, col, userData)
 	if err != nil {
-		// Jika terjadi kesalahan saat menyimpan data ke database, kirim respons dengan status Internal Server Error dan pesan kesalahan
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
 		return
 	}
 
-	// Persiapan respons yang akan dikirimkan kembali kepada klien setelah pendaftaran berhasil
-	resp := map[string]interface{}{
+	resp := map[string]any{
 		"message":    "berhasil mendaftar",
 		"insertedID": insertedID,
 		"data": map[string]string{
 			"email": user.Email,
 		},
 	}
-	// Mengirimkan respons dalam format JSON dengan status Created (201)
+
 	helper.WriteJSON(respw, http.StatusCreated, resp)
 }
