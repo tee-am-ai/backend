@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func GetUser(db *mongo.Database, w http.ResponseWriter, r *http.Request,  col, publickey string,) {
+func GetUser(db *mongo.Database, w http.ResponseWriter, r *http.Request,  col, publickey string) {
 	token := r.Header.Get("Authorization")
 	if token == "" {
 		helper.ErrorResponse(w, r, http.StatusUnauthorized, "Unauthorized", "token tidak ditemukan")
