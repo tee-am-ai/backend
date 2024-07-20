@@ -59,10 +59,10 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 		"salt":        hex.EncodeToString(salt),
 	}
 	insertedID, err := helper.InsertOneDoc(db, col, userData)
-	// if err != nil {
-	// 	helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
-	// 	return
-	// }
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
+		return
+	}
 	resp := map[string]any{
 		"message":    "berhasil mendaftar",
 		"insertedID": insertedID,
