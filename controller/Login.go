@@ -44,10 +44,10 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 		return
 	}
 	tokenstring, err := helper.Encode(user.ID, user.Email, privatekey)
-	// if err != nil {
-	// 	helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : token")
-	// 	return
-	// }
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : token")
+		return
+	}
 	resp := map[string]any{
 		"status":  "success",
 		"message": "login berhasil",
