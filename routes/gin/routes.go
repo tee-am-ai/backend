@@ -13,6 +13,7 @@ func Router() *gin.Engine {
 	r.POST("/signup", hgin.SignUp)
 	r.POST("/login", hgin.LogIn)
 	r.POST("/chat", hgin.Chat)
+	r.GET("/user", hgin.GetUser)
 
 	return r
 }
