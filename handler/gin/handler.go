@@ -26,3 +26,7 @@ func LogIn(c *gin.Context) {
 func Chat(c *gin.Context) {
 	controller.Chat(c.Writer, c.Request, os.Getenv("GO_TOKEN_MODEL"))
 }
+
+func GetUser(c *gin.Context) {
+	controller.GetUser(config.Mongoconn, c.Writer, c.Request, "users", os.Getenv("GO_PASETO_PUBLIC_KEY"))
+}
