@@ -1,11 +1,11 @@
 package main
 
-import (
-	"fmt"
-	"net/http"
+// import (
+// 	"fmt"
+// 	"net/http"
 
-	"github.com/tee-am-ai/backend/routes"
-)
+// 	"github.com/tee-am-ai/backend/routes"
+// )
 
 func main() {
 	http.HandleFunc("/", routes.URL)
