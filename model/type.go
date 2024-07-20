@@ -15,11 +15,11 @@ type User struct {
 	Salt            string             `bson:"salt,omitempty" json:"salt,omitempty"`
 }
 
-type Password struct {
-	Password        string `bson:"password,omitempty" json:"password,omitempty"`
-	Newpassword     string `bson:"newpass,omitempty" json:"newpass,omitempty"`
-	Confirmpassword string `bson:"confirmpass,omitempty" json:"confirmpass,omitempty"`
-}
+// type Password struct {
+// 	Password        string `bson:"password,omitempty" json:"password,omitempty"`
+// 	Newpassword     string `bson:"newpass,omitempty" json:"newpass,omitempty"`
+// 	Confirmpassword string `bson:"confirmpass,omitempty" json:"confirmpass,omitempty"`
+// }
 
 type AIRequest struct {
 	ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
