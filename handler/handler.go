@@ -23,7 +23,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func LogIn(w http.ResponseWriter, r *http.Request) {
-	controller.LogIn(config.Mongoconn, w, r, os.Getenv("GO_PASETO_PRIVATE_KEY"))
+	controller.LogIn(config.Mongoconn, w, r, "users", os.Getenv("GO_PASETO_PRIVATE_KEY"))
 }
 
 func Chat(w http.ResponseWriter, r *http.Request) {
