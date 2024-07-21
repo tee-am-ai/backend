@@ -39,6 +39,13 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
 		return
 	}
+
+	// Response sukses
+	resp := map[string]any{
+		"message":    "ulasan berhasil ditambahkan",
+		"insertedID": insertedID,
+	}
 	
 }
+
 
