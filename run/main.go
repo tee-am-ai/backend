@@ -10,6 +10,7 @@ import (
 	"github.com/owulveryck/onnx-go"
 	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
 	"github.com/tee-am-ai/backend/routes"
+	"gorgonia.org/tensor"
 )
 
 func main() {
@@ -56,4 +57,5 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	// Preprocess the question and create the input tensor for the model
 	// Adjust preprocessing according to your model's requirements
 	inputShape := []int{1, len(question)} // Assuming your input shape; adjust as needed
+	inputTensor := tensor.New(tensor.Of(tensor.Float32), tensor.WithShape(inputShape...))
 }
