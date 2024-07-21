@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
 	"github.com/tee-am-ai/backend/routes"
 )
 
@@ -22,4 +23,7 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to load model file", http.StatusInternalServerError)
 		return
 	}
+
+	// Initialize the Gorgonnx backend
+	backend := gorgonnx.NewGraph()
 }
