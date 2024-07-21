@@ -77,5 +77,15 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Failed to run inference", http.StatusInternalServerError)
 		return
-	}	
+	}
+
+	// Get the output tensor
+	outputTensor, err := model.GetOutputTensors()
+	if err != nil {
+		http.Error(w, "Failed to get output tensor", http.StatusInternalServerError)
+		return
+	}
+
+	
+	
 }
