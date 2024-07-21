@@ -19,6 +19,14 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
 	}
+
+	// Validasi input
+	if ulasan.NamaLengkap == "" || ulasan.Email == "" || ulasan.Rating == "" || ulasan.Message == "" {
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
+		return
+	}
+
+	
 	
 }
 
