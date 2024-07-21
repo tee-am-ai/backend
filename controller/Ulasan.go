@@ -52,6 +52,12 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 func GetAllUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
 	// Ambil semua data ulasan dari database
 	var ulasans []model.Ulasan
+	ulasans, err := helper.GetAllDocs[[]model.Ulasan](db, col, bson.M{})
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get data, "+err.Error())
+		return
+	}
+
 	
 	
 }
