@@ -36,11 +36,11 @@ type AIResponse struct {
 }
 
 
-type Credential struct {
-	Status  int    `json:"status" bson:"status"`
-	Token   string `json:"token,omitempty" bson:"token,omitempty"`
-	Message string `json:"message,omitempty" bson:"message,omitempty"`
-}
+// type Credential struct {
+// 	Status  int    `json:"status" bson:"status"`
+// 	Token   string `json:"token,omitempty" bson:"token,omitempty"`
+// 	Message string `json:"message,omitempty" bson:"message,omitempty"`
+// }
 
 type Response struct {
 	Status  int    `json:"status" bson:"status"`
