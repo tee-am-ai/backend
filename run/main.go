@@ -53,5 +53,7 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	}
 	question := requestData["question"]
 
-	
+	// Preprocess the question and create the input tensor for the model
+	// Adjust preprocessing according to your model's requirements
+	inputShape := []int{1, len(question)} // Assuming your input shape; adjust as needed
 }
