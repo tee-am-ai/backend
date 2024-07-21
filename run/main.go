@@ -70,5 +70,12 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Failed to set input tensor", http.StatusInternalServerError)
 		return
+	}
+
+	// Run inference using the Gorgonnx backend
+	err = backend.Run()
+	if err != nil {
+		http.Error(w, "Failed to run inference", http.StatusInternalServerError)
+		return
 	}	
 }
