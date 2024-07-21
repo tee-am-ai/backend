@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"bytes"
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -127,7 +129,20 @@ func Chat2(respw http.ResponseWriter, req *http.Request) {
 		return
     }
 
-    
+    // Buat request
+    resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonPayload))
+    if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error making request "+err.Error())
+		return
+    }
+    defer resp.Body.Close()
+
+    // Baca response
+    body, err := io.ReadAll(resp.Body)
+    if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error reading response body "+err.Error())
+		return
+    }
 
 
     
