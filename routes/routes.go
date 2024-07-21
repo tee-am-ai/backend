@@ -28,6 +28,8 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
 	case method == "POST" && path == "/chat":
 		controller.Chat(w, r, config.GetEnv("TOKENMODEL"))
+	case method == "POST" && path == "/chat2":
+		controller.Chat2(w, r)
 	default:
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
