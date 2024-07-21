@@ -1,10 +1,10 @@
 package model
 
-import (
-	"time"
+// import (
+// 	"time"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
-)
+// 	"go.mongodb.org/mongo-driver/bson/primitive"
+// )
 
 type User struct {
 	ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
