@@ -23,7 +23,9 @@ type Password struct {
 
 type Ulasan struct {
 	NamaLengkap      string `bson:"namalengkap,omitempty" json:"namalengkap,omitempty"`
-		
+	Email					   string `bson:"email,omitempty" json:"email,omitempty"`
+	
+	
 }
 
 type AIRequest struct {
