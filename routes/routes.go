@@ -30,6 +30,8 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		controller.Chat(w, r, config.GetEnv("TOKENMODEL"))
 	case method == "POST" && path == "/chat2":
 		controller.Chat2(w, r)
+	case method == "POST" && path == "/add_ulasan":
+		controller.AddUlasan(config.Mongoconn, "ulasan", w, r)
 	default:
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
