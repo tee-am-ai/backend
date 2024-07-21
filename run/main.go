@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/owulveryck/onnx-go"
 	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
 	"github.com/tee-am-ai/backend/routes"
 )
@@ -26,4 +27,7 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 
 	// Initialize the Gorgonnx backend
 	backend := gorgonnx.NewGraph()
+
+	// Initialize the ONNX model with the Gorgonnx backend
+	model := onnx.NewModel(backend)
 }
