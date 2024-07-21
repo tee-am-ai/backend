@@ -58,4 +58,5 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	// Adjust preprocessing according to your model's requirements
 	inputShape := []int{1, len(question)} // Assuming your input shape; adjust as needed
 	inputTensor := tensor.New(tensor.Of(tensor.Float32), tensor.WithShape(inputShape...))
+	inputTensorData := inputTensor.Data().([]float32)
 }
