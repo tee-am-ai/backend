@@ -103,5 +103,6 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 }
 
 func Chat2(respw http.ResponseWriter, req *http.Request) {
-	
+	url := "http://localhost:5000/generate"
+
 }
