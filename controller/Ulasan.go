@@ -50,6 +50,8 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 
 // Fungsi untuk mendapatkan semua ulasan
 func GetAllUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
+	// Ambil semua data ulasan dari database
+	var ulasans []model.Ulasan
 	
 	
 }
