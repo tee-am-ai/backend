@@ -51,4 +51,7 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to parse request body", http.StatusBadRequest)
 		return
 	}
+	question := requestData["question"]
+
+	
 }
