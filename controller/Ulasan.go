@@ -34,7 +34,11 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 		"rating":      ulasan.Rating,
 		"message":     ulasan.Message,
 	}
+	insertedID, err := helper.InsertOneDoc(db, col, ulasanData)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
+		return
+	}
 	
 }
-
 
