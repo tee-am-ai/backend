@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/tee-am-ai/backend/routes"
 )
@@ -15,4 +16,10 @@ func main() {
 }
 
 func ChatPredictions(w http.ResponseWriter, r *http.Request) {
+    // Load ONNX model
+    modelData, err := os.ReadFile("path/to/your/model.onnx")
+	if err != nil {
+		http.Error(w, "Failed to load model file", http.StatusInternalServerError)
+		return
+	}
 }
