@@ -22,10 +22,10 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case method == "GET" && path == "/":
 		Home(w, r)
-	case method == "POST" && path == "/signup":
-		controller.SignUp(config.Mongoconn, "users", w, r)
-	case method == "POST" && path == "/login":
-		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
+	// case method == "POST" && path == "/signup":
+	// 	controller.SignUp(config.Mongoconn, "users", w, r)
+	// case method == "POST" && path == "/login":
+	// 	controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
 	case method == "POST" && path == "/chat":
 		controller.Chat(w, r, config.GetEnv("TOKENMODEL"))
 	default:
