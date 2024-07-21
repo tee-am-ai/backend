@@ -119,7 +119,13 @@ func Chat2(respw http.ResponseWriter, req *http.Request) {
 	}
 
 
-    
+    // Buat payload JSON
+    payload := map[string]string{"question": chat.Query}
+    jsonPayload, err := json.Marshal(payload)
+    if err != nil {
+        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error parsing request body "+err.Error())
+		return
+    }
 
     
 
