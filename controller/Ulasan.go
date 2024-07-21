@@ -48,3 +48,8 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 	helper.WriteJSON(respw, http.StatusCreated, resp)
 }
 
+// Fungsi untuk mendapatkan semua ulasan
+func GetAllUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
+	
+	
+}
