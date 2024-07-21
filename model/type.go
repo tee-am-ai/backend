@@ -7,7 +7,7 @@ package model
 // )
 
 type User struct {
-	ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	// ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	NamaLengkap     string             `bson:"namalengkap,omitempty" json:"namalengkap,omitempty"`
 	Email           string             `bson:"email,omitempty" json:"email,omitempty"`
 	// Password        string             `bson:"password,omitempty" json:"password,omitempty"`
@@ -22,14 +22,14 @@ type User struct {
 // }
 
 type AIRequest struct {
-	ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	// ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	User 			User 			   `bson:"user,omitempty" json:"user,omitempty"`
 	Query   	    string             `bson:"query,omitempty" json:"query,omitempty"`
 	CreatedAt       time.Time          `bson:"created_at,omitempty" json:"created_at,omitempty"`
 }
 
 type AIResponse struct {
-	ID              primitive.ObjectID  `bson:"_id,omitempty" json:"_id,omitempty"`
+	// ID              primitive.ObjectID  `bson:"_id,omitempty" json:"_id,omitempty"`
 	AIRequest		AIRequest			`bson:"airequest,omitempty" json:"airequest,omitempty"`
 	Response  		string              `bson:"response,omitempty" json:"response,omitempty"`
 	CreatedAt 		time.Time           `bson:"created_at,omitempty" json:"created_at,omitempty"`
@@ -48,7 +48,7 @@ type Response struct {
 }
 
 type Payload struct {
-	Id    primitive.ObjectID `json:"id"`
+	// Id    primitive.ObjectID `json:"id"`
 	Email string             `json:"email"`
 	// Exp   time.Time          `json:"exp"`
 	// Iat   time.Time          `json:"iat"`
