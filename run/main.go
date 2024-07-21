@@ -13,3 +13,6 @@ func main() {
 	fmt.Println("Server started at: http://localhost" + port)
 	http.ListenAndServe(port, nil)
 }
+
+func ChatPredictions(w http.ResponseWriter, r *http.Request) {
+}
