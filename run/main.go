@@ -64,4 +64,11 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	for i, char := range question {
 		inputTensorData[i] = float32(char)
 	}
+
+	// Set the input tensor in the model
+	err = model.SetInput(0, inputTensor)
+	if err != nil {
+		http.Error(w, "Failed to set input tensor", http.StatusInternalServerError)
+		return
+	}	
 }
