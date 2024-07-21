@@ -97,7 +97,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 			return
 		}
 		helper.WriteJSON(respw, http.StatusOK, map[string]string{"answer": generatedText})
-	} else {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: response")
-	}
+	// } else {
+	// 	helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: response")
+	// }
 }
