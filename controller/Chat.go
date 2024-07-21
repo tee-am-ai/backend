@@ -145,5 +145,13 @@ func Chat2(respw http.ResponseWriter, req *http.Request) {
     }
 
 
-    
+    // Parse response
+    var result map[string]string
+    if err := json.Unmarshal(body, &result); err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error parsing response body "+err.Error())
+		return
+    }
+
+	returndata := map[string]string{"answer": result["answer"]}
+	helper.WriteJSON(respw, http.StatusOK, returndata)
 }
