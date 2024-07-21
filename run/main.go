@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 
@@ -35,6 +36,13 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	err = model.UnmarshalBinary(modelData)
 	if err != nil {
 		http.Error(w, "Failed to unmarshal model", http.StatusInternalServerError)
+		return
+	}
+
+	// Read input question from the request body
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Failed to read request body", http.StatusInternalServerError)
 		return
 	}
 }
