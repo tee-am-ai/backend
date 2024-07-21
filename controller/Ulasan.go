@@ -6,6 +6,7 @@ import (
 
 	"github.com/tee-am-ai/backend/helper"
 	model "github.com/tee-am-ai/backend/model"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -26,7 +27,14 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 		return
 	}
 
-	
+	// Masukkan data ulasan ke database
+	ulasanData := bson.M{
+		"namalengkap": ulasan.NamaLengkap,
+		"email":       ulasan.Email,
+		"rating":      ulasan.Rating,
+		"message":     ulasan.Message,
+	}
 	
 }
+
 
