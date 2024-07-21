@@ -58,6 +58,10 @@ func GetAllUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req
 		return
 	}
 
-	
+	// Response dengan data ulasan
+	resp := map[string]any{
+		"message":  "berhasil mendapatkan ulasan",
+		"ulasan": ulasans,
+	}
 	
 }
