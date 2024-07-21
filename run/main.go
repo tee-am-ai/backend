@@ -88,6 +88,9 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 
 	output := fmt.Sprintf("Output: %v", outputTensor)
 
-	
+	// Send the prediction result as the response
+	w.Header().Set("Content-Type", "application/json")
+	response := map[string]string{"prediction": output}
+	json.NewEncoder(w).Encode(response)
 	
 }
