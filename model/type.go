@@ -21,6 +21,9 @@ type Password struct {
 	Confirmpassword string `bson:"confirmpass,omitempty" json:"confirmpass,omitempty"`
 }
 
+type Ulasan struct {	
+}
+
 type AIRequest struct {
 	ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	User 			User 			   `bson:"user,omitempty" json:"user,omitempty"`
