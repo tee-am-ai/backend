@@ -86,6 +86,8 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	output := fmt.Sprintf("Output: %v", outputTensor)
+
 	
 	
 }
