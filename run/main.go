@@ -30,4 +30,11 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 
 	// Initialize the ONNX model with the Gorgonnx backend
 	model := onnx.NewModel(backend)
+
+	// Unmarshal the model
+	err = model.UnmarshalBinary(modelData)
+	if err != nil {
+		http.Error(w, "Failed to unmarshal model", http.StatusInternalServerError)
+		return
+	}
 }
