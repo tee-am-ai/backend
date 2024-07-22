@@ -21,10 +21,9 @@ func WriteJSON(respw http.ResponseWriter, statusCode int, content any) {
 }
 
 func Jsonstr(strc any) string {
-	Jsonstr, err := json.Marshal(strc)
+	jsonData, err := json.Marshal(strc)
 	if err != nil {
-		log.Printf("Failed to marshal struct: %v", err)
-		return ""
+		log.Fatal(err)
 	}
 	return string(jsonData)
 }
