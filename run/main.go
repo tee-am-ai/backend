@@ -188,7 +188,10 @@ import (
 	"github.com/owulveryck/onnx-go"
 	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
 	"github.com/sugarme/tokenizer"
-	"github.com/sugarme/tokenizer/pretrained"
+	"github.com/sugarme/tokenizer/decoder"
+	"github.com/sugarme/tokenizer/model/bpe"
+	"github.com/sugarme/tokenizer/pretokenizer"
+	"github.com/sugarme/tokenizer/processor"
 	"gorgonia.org/tensor"
 )
 
@@ -227,7 +230,25 @@ func initModel() {
 }
 
 func initTokenizer() {
-	gpt2Token = pretrained.GPT2(true, true)
+	model2, err := bpe.NewBpeFromFiles("model/gpt2-vocab.json", "model/gpt2-merges.txt")
+	if err != nil {
+		log.Fatalf("Failed to load model: %v", err)
+	}
+
+	addPrefixSpace := true
+	trimOffsets := true
+	gpt2Token = tokenizer.NewTokenizer(model2)
+
+	pretok := pretokenizer.NewByteLevel()
+	pretok.SetAddPrefixSpace(addPrefixSpace)
+	pretok.SetTrimOffsets(trimOffsets)
+	gpt2Token.WithPreTokenizer(pretok)
+
+	pprocessor := processor.NewByteLevelProcessing(pretok)
+	gpt2Token.WithPostProcessor(pprocessor)
+
+	bpeDecoder := decoder.NewBpeDecoder("Ġ")
+	gpt2Token.WithDecoder(bpeDecoder)
 }
 
 func chatHandler(w http.ResponseWriter, r *http.Request) {
@@ -248,15 +269,16 @@ func chatHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Convert tokens to tensor
-	inputTensor := tensor.New(tensor.Of(tensor.Int64), tensor.WithShape(1, len(encoded.Ids)))
+	inputTensor := tensor.New(tensor.Of(tensor.String), tensor.WithShape(1, len(encoded.Ids)))
 	for i, token := range encoded.Ids {
 		inputTensor.SetAt(int64(token), i)
 	}
 
+	println(inputTensor.Data().([]int64))
 	// Set the input for the backend using onnx.Value
-	input, err := onnx.NewTensor([]byte(inputTensor.DataOrder().String()))
+	input, err := onnx.NewTensor([]byte(inputTensor.String()))
 	if err != nil {
-		http.Error(w, "Failed to create input tensor", http.StatusInternalServerError)
+		http.Error(w, "Failed to create input tensor " + err.Error(), http.StatusInternalServerError)
 		return
 	}
 
