@@ -9,12 +9,10 @@ import (
 
 	"github.com/owulveryck/onnx-go"
 	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
-	"github.com/tee-am-ai/backend/routes"
-	"gorgonia.org/tensor"
 )
 
 func main() {
-	http.HandleFunc("/", routes.URL)
+	http.HandleFunc("/", ChatPredictions)
 	port := ":8080"
 	fmt.Println("Server started at: http://localhost" + port)
 	http.ListenAndServe(port, nil)
@@ -22,7 +20,7 @@ func main() {
 
 func ChatPredictions(w http.ResponseWriter, r *http.Request) {
     // Load ONNX model
-    modelData, err := os.ReadFile("path/to/your/model.onnx")
+    modelData, err := os.ReadFile("./gpt2.onnx")
 	if err != nil {
 		http.Error(w, "Failed to load model file", http.StatusInternalServerError)
 		return
@@ -56,17 +54,29 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 
 	// Preprocess the question and create the input tensor for the model
 	// Adjust preprocessing according to your model's requirements
-	inputShape := []int{1, len(question)} // Assuming your input shape; adjust as needed
-	inputTensor := tensor.New(tensor.Of(tensor.Float32), tensor.WithShape(inputShape...))
-	inputTensorData := inputTensor.Data().([]float32)
+	// inputShape := []int{1, len(question)} // Assuming your input shape; adjust as needed
+	// inputTensor := tensor.New(tensor.Of(tensor.Float32), tensor.WithShape(inputShape...))
+
+	// inputTensor to byte
+	inputBytes := []byte(question)
+
+	// inputTensor := tensor.New(tensor.Of(tensor.Float32), tensor.WithShape(1, 1, 1, len(question)))
+	
+
+	onnxTensor, err := onnx.NewTensor(inputBytes)
+	if err != nil {
+		http.Error(w, "Failed to create ONNX tensor", http.StatusInternalServerError)
+		return
+	}
+	// inputTensorData := inputTensor.Data().([]float32)
 
 	// Fill inputTensorData with your input question data
-	for i, char := range question {
-		inputTensorData[i] = float32(char)
-	}
+	// for i, char := range question {
+	// 	inputTensorData[i] = float32(char)
+	// }
 
 	// Set the input tensor in the model
-	err = model.SetInput(0, inputTensor)
+	err = model.SetInput(0, onnxTensor)
 	if err != nil {
 		http.Error(w, "Failed to set input tensor", http.StatusInternalServerError)
 		return
@@ -75,7 +85,7 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	// Run inference using the Gorgonnx backend
 	err = backend.Run()
 	if err != nil {
-		http.Error(w, "Failed to run inference", http.StatusInternalServerError)
+		http.Error(w, "Failed to run inference " + err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -92,5 +102,4 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	response := map[string]string{"prediction": output}
 	json.NewEncoder(w).Encode(response)
-	
 }
