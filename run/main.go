@@ -274,7 +274,7 @@ func chatHandler(w http.ResponseWriter, r *http.Request) {
 		inputTensor.SetAt(int64(token), i)
 	}
 
-	println(inputTensor.Data().([]int64))
+	// println(inputTensor.Data().([]int64))
 	// Set the input for the backend using onnx.Value
 	input, err := onnx.NewTensor([]byte(inputTensor.String()))
 	if err != nil {
