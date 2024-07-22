@@ -9,6 +9,8 @@ import (
 
 	"github.com/owulveryck/onnx-go"
 	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
+	"github.com/sugarme/tokenizer"
+	"github.com/sugarme/tokenizer/model/bpe"
 	"github.com/sugarme/tokenizer/pretrained"
 	"gorgonia.org/tensor"
 )
@@ -21,14 +23,32 @@ func main() {
 }
 
 func ChatPredictions(w http.ResponseWriter, r *http.Request) {
-	// configFile, err := tokenizer.CachedPath("./", "tokenizer_config.json")
+	// configFile, err := tokenizer.CachedPath("./model", "tokenizer_config.json")
 	// if err != nil {
 	// 	http.Error(w, "Failed to load tokenizer", http.StatusInternalServerError)
 	// 	return
 	// }
+
+	// model2, err := bpe.NewBpeFromFiles("model/gpt2-vocab.json", "model/gpt2-merges.txt")
+	// if err != nil {
+	// 	http.Error(w, "Failed to load tokenizer", http.StatusInternalServerError)
+	// 	return
+	// }
+	
+
+	// bl := pretokenizer.
+
+	// tk := tokenizer.NewTokenizer(model2)
+	// Initialize the tokenizer
+	// tokenizer := tokenizer.NewTokenizer(configFile)
+
+
+	bpe.NewBpeFromFiles("model/gpt2-vocab.json", "model/gpt2-merges.txt")
+
+
 	prefix := true
 	trim := true
-	tokenizer := pretrained.GPT2(prefix, trim)
+	tokenizerp := pretrained.GPT2(prefix, trim)
     // Load ONNX model
     modelData, err := os.ReadFile("./gpt2.onnx")
 	if err != nil {
@@ -69,8 +89,9 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 
 	// inputTensor to byte
 	// inputBytes := []byte(question)
+	inputSeq := tokenizer.NewInputSequence(question)
 
-	encoded, err := tokenizer.EncodeSingle(question)
+	encoded, err := tokenizerp.Encode(tokenizer.NewSingleEncodeInput(inputSeq), false)
 	if err != nil {
 		http.Error(w, "Failed to encode question", http.StatusInternalServerError)
 		return
