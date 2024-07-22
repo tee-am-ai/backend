@@ -10,7 +10,6 @@ import (
 	"github.com/owulveryck/onnx-go"
 	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
 	"github.com/sugarme/tokenizer"
-	"github.com/sugarme/tokenizer/model/bpe"
 	"github.com/sugarme/tokenizer/pretrained"
 	"gorgonia.org/tensor"
 )
@@ -23,7 +22,12 @@ func main() {
 }
 
 func ChatPredictions(w http.ResponseWriter, r *http.Request) {
-	// configFile, err := tokenizer.CachedPath("./model", "tokenizer_config.json")
+	// tokenizer.CachedPath("./model", "tokenizer_config.json")
+	err := tokenizer.CleanCache()
+	if err != nil {
+		http.Error(w, "Failed to clean chace", http.StatusInternalServerError)
+		return
+	}
 	// if err != nil {
 	// 	http.Error(w, "Failed to load tokenizer", http.StatusInternalServerError)
 	// 	return
@@ -43,7 +47,9 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	// tokenizer := tokenizer.NewTokenizer(configFile)
 
 
-	bpe.NewBpeFromFiles("model/gpt2-vocab.json", "model/gpt2-merges.txt")
+	// bpe.NewBpeFromFiles("model/gpt2-vocab.json", "model/gpt2-merges.txt")
+	// Chaced Directory
+
 
 
 	prefix := true
