@@ -227,12 +227,7 @@ func initModel() {
 }
 
 func initTokenizer() {
-	var err error
-	// Load the tokenizer
 	gpt2Token = pretrained.GPT2(true, true)
-	if err != nil {
-		log.Fatalf("Failed to load GPT-2 tokenizer: %v", err)
-	}
 }
 
 func chatHandler(w http.ResponseWriter, r *http.Request) {
@@ -266,7 +261,7 @@ func chatHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set the input tensor in the model
-	err = backend.SetInput(0, input)
+	err = model.SetInput(0, input)
 	if err != nil {
 		http.Error(w, "Failed to set input tensor", http.StatusInternalServerError)
 		return
@@ -281,7 +276,7 @@ func chatHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Extract and process output
-	output, err := backend.GetOutputTensors()
+	output, err := model.GetOutputTensors()
 	if err != nil {
 		http.Error(w, "Failed to get output", http.StatusInternalServerError)
 		return
@@ -289,10 +284,6 @@ func chatHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Decode output tokens
 	decodedOutput := gpt2Token.Decode(output[0].Data().([]int), true)
-	if err != nil {
-		http.Error(w, "Failed to decode output", http.StatusInternalServerError)
-		return
-	}
 
 	// Create response
 	chatResp := ChatResponse{
