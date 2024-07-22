@@ -187,7 +187,6 @@ import (
 
 	"github.com/owulveryck/onnx-go"
 	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
-	"github.com/owulveryck/onnx-go/internal/onnx/ir"
 	"github.com/sugarme/tokenizer"
 	"github.com/sugarme/tokenizer/pretrained"
 	"gorgonia.org/tensor"
@@ -259,13 +258,21 @@ func chatHandler(w http.ResponseWriter, r *http.Request) {
 		inputTensor.SetAt(int64(token), i)
 	}
 
-	// Create ONNX tensor
-	input := &ir.TensorProto{
-		DataType: ir.TensorProto_INT64,
-		Int64Data: encoded.Ids,
-		Dims: []int64{1, int64(len(encoded.Ids))},
+	// Set the input for the backend using onnx.Value
+	input, err := onnx.NewTensor([]byte(inputTensor.DataOrder().String()))
+	if err != nil {
+		http.Error(w, "Failed to create input tensor", http.StatusInternalServerError)
+		return
 	}
 
+	// Set the input tensor in the model
+	err = backend.SetInput(0, input)
+	if err != nil {
+		http.Error(w, "Failed to set input tensor", http.StatusInternalServerError)
+		return
+	}
+
+	
 	// Run the inference
 	err = backend.Run()
 	if err != nil {
