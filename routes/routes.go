@@ -14,33 +14,24 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if config.ErrorMongoconn != nil {
-		helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: database, "+config.ErrorMongoconn.Error())
+		helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : database, " + config.ErrorMongoconn.Error())
 		return
 	}
 
-	switch r.Method {
-	case "GET":
-		if r.URL.Path == "/" {
-			Home(w, r)
-			return
-		}
-	case "POST":
-		switch r.URL.Path {
-		case "/signup":
-			controller.SignUp(config.Mongoconn, "users", w, r)
-			return
-		case "/login":
-			controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
-			return
-		case "/chat":
-			controller.Chat(w, r, config.GetEnv("TOKENMODEL"))
-			return
-		}
+	var method, path string = r.Method, r.URL.Path
+	switch {
+	case method == "GET" && path == "/":
+		Home(w, r)
+	case method == "POST" && path == "/signup":
+		controller.SignUp(config.Mongoconn, "users", w, r)
+	case method == "POST" && path == "/login":
+		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
+	case method == "POST" && path == "/chat":
+		controller.Chat(w, r, config.GetEnv("TOKENMODEL"))
+	default:
+		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
-
-	helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 }
-
 
 func Home(respw http.ResponseWriter, req *http.Request) {
 	resp := map[string]string{
