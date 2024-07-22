@@ -23,9 +23,10 @@ func main() {
 
 func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	// tokenizer.CachedPath("./model", "tokenizer_config.json")
+	// tokenizer.CachedDir = "./model"
 	err := tokenizer.CleanCache()
 	if err != nil {
-		http.Error(w, "Failed to clean chace", http.StatusInternalServerError)
+		http.Error(w, "Failed to clean cache", http.StatusInternalServerError)
 		return
 	}
 	// if err != nil {
