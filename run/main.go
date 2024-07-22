@@ -10,7 +10,10 @@ import (
 	"github.com/owulveryck/onnx-go"
 	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
 	"github.com/sugarme/tokenizer"
+	"github.com/sugarme/tokenizer/decoder"
 	"github.com/sugarme/tokenizer/model/bpe"
+	"github.com/sugarme/tokenizer/pretokenizer"
+	"github.com/sugarme/tokenizer/processor"
 	"gorgonia.org/tensor"
 )
 
@@ -39,11 +42,26 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to load tokenizer", http.StatusInternalServerError)
 		return
 	}
+
+	addPrefixSpace := true
+	trimOffsets := true
+	tk := tokenizer.NewTokenizer(model2)
+
+	pretok := pretokenizer.NewByteLevel()
+	pretok.SetAddPrefixSpace(addPrefixSpace)
+	pretok.SetTrimOffsets(trimOffsets)
+	tk.WithPreTokenizer(pretok)
+
+	pprocessor := processor.NewByteLevelProcessing(pretok)
+	tk.WithPostProcessor(pprocessor)
+
+	bpeDecoder := decoder.NewBpeDecoder("Ġ")
+	tk.WithDecoder(bpeDecoder)
 	
 
 	// bl := pretokenizer.
 
-	tk := tokenizer.NewTokenizer(model2)
+	// tk := tokenizer.NewTokenizer(model2)
 	// Initialize the tokenizer
 	// tokenizer := tokenizer.NewTokenizer(configFile)
 
@@ -55,7 +73,7 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 
 	// prefix := true
 	// trim := true
-	// tokenizerp := pretrained.GPT2(prefix, trim)
+	// tk := pretrained.GPT2(prefix, trim)
     // Load ONNX model
     modelData, err := os.ReadFile("./gpt2.onnx")
 	if err != nil {
