@@ -149,11 +149,11 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Run inference using the Gorgonnx backend
-	err = backend.Run()
-	if err != nil {
-		http.Error(w, "Failed to run inference " + err.Error(), http.StatusInternalServerError)
-		return
-	}
+	// err = backend.Run()
+	// if err != nil {
+	// 	http.Error(w, "Failed to run inference " + err.Error(), http.StatusInternalServerError)
+	// 	return
+	// }
 
 	// Get the output tensor
 	outputTensor, err := model.GetOutputTensors()
@@ -162,7 +162,16 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	output := fmt.Sprintf("Output: %v", outputTensor)
+	outputData := outputTensor[0].Data().([]float32)
+	ints := make([]int, len(outputData))
+    
+    for i, value := range outputData {
+        ints[i] = int(value)
+    }
+
+	decodedOutput := tk.Decode(ints, true)
+
+	output := fmt.Sprintf("Output: %v", decodedOutput)
 
 	// Send the prediction result as the response
 	w.Header().Set("Content-Type", "application/json")
