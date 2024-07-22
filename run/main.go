@@ -26,11 +26,9 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	// 	http.Error(w, "Failed to load tokenizer", http.StatusInternalServerError)
 	// 	return
 	// }
-	tokenizer, err := pretrained.FromFile("./tokenizer_config.json")
-	if err != nil {
-		http.Error(w, "Failed to load tokenizer", http.StatusInternalServerError)
-		return
-	}
+	prefix := false
+	trim := false
+	tokenizer := pretrained.GPT2(prefix, trim)
     // Load ONNX model
     modelData, err := os.ReadFile("./gpt2.onnx")
 	if err != nil {
