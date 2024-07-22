@@ -9,6 +9,8 @@ import (
 
 	"github.com/owulveryck/onnx-go"
 	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
+	"github.com/sugarme/tokenizer/pretrained"
+	"gorgonia.org/tensor"
 )
 
 func main() {
@@ -19,6 +21,16 @@ func main() {
 }
 
 func ChatPredictions(w http.ResponseWriter, r *http.Request) {
+	// configFile, err := tokenizer.CachedPath("./", "tokenizer_config.json")
+	// if err != nil {
+	// 	http.Error(w, "Failed to load tokenizer", http.StatusInternalServerError)
+	// 	return
+	// }
+	tokenizer, err := pretrained.FromFile("./tokenizer_config.json")
+	if err != nil {
+		http.Error(w, "Failed to load tokenizer", http.StatusInternalServerError)
+		return
+	}
     // Load ONNX model
     modelData, err := os.ReadFile("./gpt2.onnx")
 	if err != nil {
@@ -58,16 +70,26 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	// inputTensor := tensor.New(tensor.Of(tensor.Float32), tensor.WithShape(inputShape...))
 
 	// inputTensor to byte
-	inputBytes := []byte(question)
+	// inputBytes := []byte(question)
 
-	// inputTensor := tensor.New(tensor.Of(tensor.Float32), tensor.WithShape(1, 1, 1, len(question)))
-	
-
-	onnxTensor, err := onnx.NewTensor(inputBytes)
+	encoded, err := tokenizer.EncodeSingle(question)
 	if err != nil {
-		http.Error(w, "Failed to create ONNX tensor", http.StatusInternalServerError)
+		http.Error(w, "Failed to encode question", http.StatusInternalServerError)
 		return
 	}
+
+	input := tensor.New(tensor.Of(tensor.Int64), tensor.WithShape(1, len(encoded.Ids)))
+
+	for i, token := range encoded.Ids {
+		input.SetAt(int64(token), i)
+	}	
+	
+
+	// onnxTensor, err := onnx.NewTensor(inputBytes)
+	// if err != nil {
+	// 	http.Error(w, "Failed to create ONNX tensor", http.StatusInternalServerError)
+	// 	return
+	// }
 	// inputTensorData := inputTensor.Data().([]float32)
 
 	// Fill inputTensorData with your input question data
@@ -76,7 +98,7 @@ func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 	// }
 
 	// Set the input tensor in the model
-	err = model.SetInput(0, onnxTensor)
+	err = model.SetInput(0, input)
 	if err != nil {
 		http.Error(w, "Failed to set input tensor", http.StatusInternalServerError)
 		return
