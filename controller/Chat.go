@@ -31,13 +31,11 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	client := resty.New()
 
 	// Hugging Face API URL dan token
-	apiUrl := config.GetEnv("HUGGINGFACE_API_KEY")
+	apiUrl := config.GetEnv("HUGGINGFACEAPIKEY")
 	apiToken := "Bearer " + tokenmodel
 
 	var response *resty.Response
 	var retryCount int
-	maxRetries := 5
-	retryDelay := 20 * time.Second
 	
 	parsedURL, err := url.Parse(apiUrl)
 
