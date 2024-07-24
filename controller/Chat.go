@@ -110,10 +110,7 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error extracting generated text")
 			return
 		}
-		idchat := req.URL.Query().Get("id")
-		println(idchat)
-		path := req.URL.Path
-		println(path)
+		idchat := strings.Split(req.URL.Path, "/")[2]
 		if idchat == "" {
 			chat := model.ChatUser{
 				Title:    chat.Query,
