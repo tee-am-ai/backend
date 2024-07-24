@@ -14,12 +14,21 @@ import (
 	"github.com/tee-am-ai/backend/config"
 	"github.com/tee-am-ai/backend/helper"
 	"github.com/tee-am-ai/backend/model"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
+func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, tokenmodel, PASETOPUBLICKEYENV string) {
+	tokenstring := req.Header.Get("Login")
+	payload, err := helper.Decode(PASETOPUBLICKEYENV, tokenstring)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error decoding token "+err.Error())
+		return
+	}
+
+	// Parse request body
 	var chat model.AIRequest
 
-	err := json.NewDecoder(req.Body).Decode(&chat)
+	err = json.NewDecoder(req.Body).Decode(&chat)
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
