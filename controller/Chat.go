@@ -109,14 +109,18 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 		}
 		idchat := req.URL.Query().Get("id")
 		if idchat == "" {
-			// insert chat
 			chat := model.ChatUser{
-				Question: chat.Query,
-				Answer:   generatedText,
-				UserID:   payload.Id,
+				Title:    chat.Query,
+				Chat: model.Chat{
+					Question: chat.Query,
+					Answer:   generatedText,
+					CreatedAt: time.Now(),
+				},
+				UserID: payload.Id,
 			}
 			helper.InsertOneDoc(db, "chats", chat)
 		}
+		
 		helper.WriteJSON(respw, http.StatusOK, map[string]string{"answer": generatedText})
 	} else {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: response")
