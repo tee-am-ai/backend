@@ -31,7 +31,7 @@ type Ulasan struct {
 type ChatUser struct {
 	ID       primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	Title    string             `bson:"title,omitempty" json:"title,omitempty"`
-	Chat     Chat               `bson:"chat,omitempty" json:"chat,omitempty"`
+	Chat     []Chat             `bson:"chat,omitempty" json:"chat,omitempty"`
 	UserID   primitive.ObjectID `bson:"userid,omitempty" json:"userid,omitempty"`
 }
 
