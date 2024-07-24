@@ -27,8 +27,6 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error decoding token "+err.Error())
 		return
 	}
-	println(payload.Id.String())
-	println(payload.Email)
 
 	// Parse request body
 	var chat model.AIRequest
@@ -132,10 +130,14 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 				helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
 				return
 			}
-			chat := model.Chat{
-				Question:  chat.Query,
-				Answer:    generatedText,
-				CreatedAt: time.Now(),
+			chat := model.ChatUser{
+					Chat: []model.Chat{
+					{
+						Question:  chat.Query,
+						Answer:    generatedText,
+						CreatedAt: time.Now(),
+					},
+				},
 			}
 			filter := bson.M{"_id": objid}
 			result, err := db.Collection("chats").UpdateOne(context.Background(), filter, bson.M{"$push": chat})
