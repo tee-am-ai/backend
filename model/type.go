@@ -29,9 +29,17 @@ type Ulasan struct {
 }
 
 type ChatUser struct {
-	Question string 			`bson:"question,omitempty" json:"question,omitempty"`
-	Answer   string 			`bson:"answer,omitempty" json:"answer,omitempty"`
+	ID       primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	Title    string             `bson:"title,omitempty" json:"title,omitempty"`
+	Chat     Chat               `bson:"chat,omitempty" json:"chat,omitempty"`
 	UserID   primitive.ObjectID `bson:"userid,omitempty" json:"userid,omitempty"`
+}
+
+type Chat struct {
+	ID       	primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	Question 	string             `bson:"question,omitempty" json:"question,omitempty"`
+	Answer   	string             `bson:"answer,omitempty" json:"answer,omitempty"`
+	CreatedAt 	time.Time          `bson:"created_at,omitempty" json:"created_at,omitempty"`
 }
 
 type AIRequest struct {
