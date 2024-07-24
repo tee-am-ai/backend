@@ -28,6 +28,12 @@ type Ulasan struct {
 	Message					 string `bson:"message,omitempty" json:"message,omitempty"`
 }
 
+type ChatUser struct {
+	Question string 			`bson:"question,omitempty" json:"question,omitempty"`
+	Answer   string 			`bson:"answer,omitempty" json:"answer,omitempty"`
+	UserID   primitive.ObjectID `bson:"userid,omitempty" json:"userid,omitempty"`
+}
+
 type AIRequest struct {
 	ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	User 			User 			   `bson:"user,omitempty" json:"user,omitempty"`
