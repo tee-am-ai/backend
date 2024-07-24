@@ -107,13 +107,13 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error extracting generated text")
 			return
 		}
-		idchat := r.URL.Query().Get("id")
+		idchat := req.URL.Query().Get("id")
 		if idchat == "" {
 			// insert chat
-			chat := model.Chat{
+			chat := model.ChatUser{
 				Question: chat.Query,
 				Answer:   generatedText,
-				UserID:   payload["id"].(string),
+				UserID:   payload.Id,
 			}
 			helper.InsertOneDoc(db, "chats", chat)
 		}
