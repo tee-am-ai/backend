@@ -14,6 +14,7 @@ import (
 	"github.com/tee-am-ai/backend/config"
 	"github.com/tee-am-ai/backend/helper"
 	"github.com/tee-am-ai/backend/model"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -111,14 +112,32 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 		if idchat == "" {
 			chat := model.ChatUser{
 				Title:    chat.Query,
-				Chat: model.Chat{
-					Question: chat.Query,
-					Answer:   generatedText,
-					CreatedAt: time.Now(),
+				Chat:     []model.Chat{
+					{
+						Question:  chat.Query,
+						Answer:    generatedText,
+						CreatedAt: time.Now(),
+					},
 				},
 				UserID: payload.Id,
 			}
 			helper.InsertOneDoc(db, "chats", chat)
+		} else {
+			objid, err := primitive.ObjectIDFromHex(idchat)
+			if err != nil {
+				helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
+				return
+			}
+			chat := model.ChatUser{
+				Chat: []model.Chat{
+					{
+						Question:  chat.Query,
+						Answer:    generatedText,
+						CreatedAt: time.Now(),
+					},
+				},
+			}
+			helper.UpdateOneDoc(db, "chats", objid, chat)
 		}
 		
 		helper.WriteJSON(respw, http.StatusOK, map[string]string{"answer": generatedText})
