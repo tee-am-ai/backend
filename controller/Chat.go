@@ -2,7 +2,9 @@ package controller
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -14,6 +16,7 @@ import (
 	"github.com/tee-am-ai/backend/config"
 	"github.com/tee-am-ai/backend/helper"
 	"github.com/tee-am-ai/backend/model"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -130,16 +133,20 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 				helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
 				return
 			}
-			chat := model.ChatUser{
-				Chat: []model.Chat{
-					{
-						Question:  chat.Query,
-						Answer:    generatedText,
-						CreatedAt: time.Now(),
-					},
-				},
+			chat := model.Chat{
+				Question:  chat.Query,
+				Answer:    generatedText,
+				CreatedAt: time.Now(),
 			}
-			helper.UpdateOneDoc(db, "chats", objid, chat)
+			filter := bson.M{"_id": objid}
+			result, err := db.Collection("chats").UpdateOne(context.Background(), filter, bson.M{"$push": chat})
+			if err != nil {
+				// helper.ErrorResponse(respw, req, ht)
+			}
+			if result.ModifiedCount == 0 {
+				err = fmt.Errorf("tidak ada data yang diubah")
+				return
+			}
 		}
 		helper.WriteJSON(respw, http.StatusOK, map[string]string{"answer": generatedText})
 	} else {
