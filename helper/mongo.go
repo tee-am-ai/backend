@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"net/http"
 
 	"github.com/tee-am-ai/backend/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -73,13 +72,4 @@ func GetUserFromID(_id primitive.ObjectID, db *mongo.Database) (doc model.User, 
 		return doc, fmt.Errorf("error retrieving data for ID %s: %s", _id, err.Error())
 	}
 	return doc, nil
-}
-
-func GetUserLogin(PASETOPUBLICKEYENV string, r *http.Request) (Payload, error) {
-	tokenstring := r.Header.Get("Authorization")
-	payload, err := Decode(PASETOPUBLICKEYENV, tokenstring)
-	if err != nil {
-		return payload, err
-	}
-	return payload, nil
 }
