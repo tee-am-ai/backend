@@ -2,6 +2,7 @@ package routes
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/tee-am-ai/backend/config"
 	controller "github.com/tee-am-ai/backend/controller"
@@ -19,21 +20,23 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var method, path string = r.Method, r.URL.Path
-	println(method, path)
+	if path != "/" {
+		path = strings.Split(path, "/")[1]
+	}
 	switch {
 	case method == "GET" && path == "/":
 		Home(w, r)
-	case method == "POST" && path == "/signup":
+	case method == "POST" && path == "signup":
 		controller.SignUp(config.Mongoconn, "users", w, r)
-	case method == "POST" && path == "/login":
+	case method == "POST" && path == "login":
 		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
-	case method == "POST" && path == "/chat":
+	case method == "POST" && path == "chat":
 		controller.Chat(config.Mongoconn, w, r, config.GetEnv("TOKENMODEL"), config.GetEnv("PASETOPUBLICKEY"))
-	case method == "POST" && path == "/chat2":
+	case method == "POST" && path == "chat2":
 		controller.Chat2(w, r)
-	case method == "POST" && path == "/add_ulasan":
+	case method == "POST" && path == "add_ulasan":
 		controller.AddUlasan(config.Mongoconn, "ulasan", w, r)
-	case method == "GET" && path == "/ulasan":
+	case method == "GET" && path == "ulasan":
 		controller.GetAllUlasan(config.Mongoconn, "ulasan", w, r)
 	default:
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
