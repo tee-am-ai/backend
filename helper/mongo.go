@@ -33,6 +33,19 @@ func InsertOneDoc(db *mongo.Database, col string, doc any) (insertedID primitive
 	return result.InsertedID.(primitive.ObjectID), nil
 }
 
+func UpdateOneDoc(db *mongo.Database, col string, id primitive.ObjectID, doc any) (err error) {
+	filter := bson.M{"_id": id}
+	result, err := db.Collection(col).UpdateOne(context.Background(), filter, bson.M{"$set": doc})
+	if err != nil {
+		return fmt.Errorf("error update: %v", err)
+	}
+	if result.ModifiedCount == 0 {
+		err = fmt.Errorf("tidak ada data yang diubah")
+		return
+	}
+	return nil
+}
+
 func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err error) {
 	collection := db.Collection("users")
 	filter := bson.M{"email": email}
