@@ -116,6 +116,7 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 				Title:    chat.Query,
 				Chat:     []model.Chat{
 					{
+						ID:        primitive.NewObjectID(),
 						Question:  chat.Query,
 						Answer:    generatedText,
 						CreatedAt: time.Now(),
@@ -131,6 +132,7 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 				return
 			}
 			chat := bson.M{"chat" : model.Chat{
+					ID:        primitive.NewObjectID(),
 					Question:  chat.Query,
 					Answer:    generatedText,
 					CreatedAt: time.Now(),
@@ -150,7 +152,7 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 		resp := map[string]any{
 			"id":       idchat,
 			"question": chat.Query,
-			"response": generatedText,
+			"answer": generatedText,
 			"userid":   payload.Id,
 		}
 		helper.WriteJSON(respw, http.StatusOK, resp)
@@ -209,4 +211,8 @@ func Chat2(respw http.ResponseWriter, req *http.Request) {
 
 	returndata := map[string]string{"answer": result["answer"]}
 	helper.WriteJSON(respw, http.StatusOK, returndata)
+}
+
+func HistoryChat(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
+	
 }
