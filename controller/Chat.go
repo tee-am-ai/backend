@@ -111,6 +111,9 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 			return
 		}
 		idchat := req.URL.Query().Get("id")
+		println(idchat)
+		path := req.URL.Path
+		println(path)
 		if idchat == "" {
 			chat := model.ChatUser{
 				Title:    chat.Query,
@@ -130,13 +133,10 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 				helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
 				return
 			}
-			chat := model.ChatUser{
-					Chat: []model.Chat{
-					{
-						Question:  chat.Query,
-						Answer:    generatedText,
-						CreatedAt: time.Now(),
-					},
+			chat := bson.M{"chat" : model.Chat{
+					Question:  chat.Query,
+					Answer:    generatedText,
+					CreatedAt: time.Now(),
 				},
 			}
 			filter := bson.M{"_id": objid}
@@ -150,7 +150,13 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 				return
 			}
 		}
-		helper.WriteJSON(respw, http.StatusOK, map[string]string{"answer": generatedText})
+		resp := map[string]any{
+			"id":       idchat,
+			"question": chat.Query,
+			"response": generatedText,
+			"userid":   payload.Id,
+		}
+		helper.WriteJSON(respw, http.StatusOK, resp)
 	} else {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: response")
 	}
