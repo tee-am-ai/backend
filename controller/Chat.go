@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -141,10 +140,11 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 			filter := bson.M{"_id": objid}
 			result, err := db.Collection("chats").UpdateOne(context.Background(), filter, bson.M{"$push": chat})
 			if err != nil {
-				// helper.ErrorResponse(respw, req, ht)
+				helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
+				return
 			}
 			if result.ModifiedCount == 0 {
-				err = fmt.Errorf("tidak ada data yang diubah")
+				helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: update")
 				return
 			}
 		}
