@@ -1,4 +1,11 @@
-// package main
+package main
+
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/tee-am-ai/backend/routes"
+)
 
 // import (
 // 	"encoding/json"
@@ -17,12 +24,12 @@
 // 	"gorgonia.org/tensor"
 // )
 
-// func main() {
-// 	http.HandleFunc("/", ChatPredictions)
-// 	port := ":8080"
-// 	fmt.Println("Server started at: http://localhost" + port)
-// 	http.ListenAndServe(port, nil)
-// }
+func main() {
+	http.HandleFunc("/", routes.URL)
+	port := ":8080"
+	fmt.Println("Server started at: http://localhost" + port)
+	http.ListenAndServe(port, nil)
+}
 
 // func ChatPredictions(w http.ResponseWriter, r *http.Request) {
 // 	// tokenizer.CachedPath("./model", "tokenizer_config.json")
@@ -176,153 +183,153 @@
 // 	json.NewEncoder(w).Encode(response)
 // }
 
-package main
+// package main
 
-import (
-	"encoding/json"
-	"fmt"
-	"log"
-	"net/http"
-	"os"
+// import (
+// 	"encoding/json"
+// 	"fmt"
+// 	"log"
+// 	"net/http"
+// 	"os"
 
-	"github.com/owulveryck/onnx-go"
-	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
-	"github.com/sugarme/tokenizer"
-	"github.com/sugarme/tokenizer/decoder"
-	"github.com/sugarme/tokenizer/model/bpe"
-	"github.com/sugarme/tokenizer/pretokenizer"
-	"github.com/sugarme/tokenizer/processor"
-	"gorgonia.org/tensor"
-)
+// 	"github.com/owulveryck/onnx-go"
+// 	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
+// 	"github.com/sugarme/tokenizer"
+// 	"github.com/sugarme/tokenizer/decoder"
+// 	"github.com/sugarme/tokenizer/model/bpe"
+// 	"github.com/sugarme/tokenizer/pretokenizer"
+// 	"github.com/sugarme/tokenizer/processor"
+// 	"gorgonia.org/tensor"
+// )
 
-type ChatRequest struct {
-	Input string `json:"input"`
-}
+// type ChatRequest struct {
+// 	Input string `json:"input"`
+// }
 
-type ChatResponse struct {
-	Response string `json:"response"`
-}
+// type ChatResponse struct {
+// 	Response string `json:"response"`
+// }
 
-var (
-	model     *onnx.Model
-	backend   *gorgonnx.Graph
-	gpt2Token *tokenizer.Tokenizer
-)
+// var (
+// 	model     *onnx.Model
+// 	backend   *gorgonnx.Graph
+// 	gpt2Token *tokenizer.Tokenizer
+// )
 
-func initModel() {
-	// Load the model data
-	modelData, err := os.ReadFile("./gpt2.onnx")
-	if err != nil {
-		log.Fatalf("Failed to load model file: %v", err)
-	}
+// func initModel() {
+// 	// Load the model data
+// 	modelData, err := os.ReadFile("./gpt2.onnx")
+// 	if err != nil {
+// 		log.Fatalf("Failed to load model file: %v", err)
+// 	}
 
-	// Initialize the Gorgonnx backend
-	backend = gorgonnx.NewGraph()
+// 	// Initialize the Gorgonnx backend
+// 	backend = gorgonnx.NewGraph()
 
-	// Initialize the ONNX model with the Gorgonnx backend
-	model = onnx.NewModel(backend)
+// 	// Initialize the ONNX model with the Gorgonnx backend
+// 	model = onnx.NewModel(backend)
 
-	// Unmarshal the model
-	err = model.UnmarshalBinary(modelData)
-	if err != nil {
-		log.Fatalf("Failed to unmarshal model: %v", err)
-	}
-}
+// 	// Unmarshal the model
+// 	err = model.UnmarshalBinary(modelData)
+// 	if err != nil {
+// 		log.Fatalf("Failed to unmarshal model: %v", err)
+// 	}
+// }
 
-func initTokenizer() {
-	model2, err := bpe.NewBpeFromFiles("model/gpt2-vocab.json", "model/gpt2-merges.txt")
-	if err != nil {
-		log.Fatalf("Failed to load model: %v", err)
-	}
+// func initTokenizer() {
+// 	model2, err := bpe.NewBpeFromFiles("model/gpt2-vocab.json", "model/gpt2-merges.txt")
+// 	if err != nil {
+// 		log.Fatalf("Failed to load model: %v", err)
+// 	}
 
-	addPrefixSpace := true
-	trimOffsets := true
-	gpt2Token = tokenizer.NewTokenizer(model2)
+// 	addPrefixSpace := true
+// 	trimOffsets := true
+// 	gpt2Token = tokenizer.NewTokenizer(model2)
 
-	pretok := pretokenizer.NewByteLevel()
-	pretok.SetAddPrefixSpace(addPrefixSpace)
-	pretok.SetTrimOffsets(trimOffsets)
-	gpt2Token.WithPreTokenizer(pretok)
+// 	pretok := pretokenizer.NewByteLevel()
+// 	pretok.SetAddPrefixSpace(addPrefixSpace)
+// 	pretok.SetTrimOffsets(trimOffsets)
+// 	gpt2Token.WithPreTokenizer(pretok)
 
-	pprocessor := processor.NewByteLevelProcessing(pretok)
-	gpt2Token.WithPostProcessor(pprocessor)
+// 	pprocessor := processor.NewByteLevelProcessing(pretok)
+// 	gpt2Token.WithPostProcessor(pprocessor)
 
-	bpeDecoder := decoder.NewBpeDecoder("Ġ")
-	gpt2Token.WithDecoder(bpeDecoder)
-}
+// 	bpeDecoder := decoder.NewBpeDecoder("Ġ")
+// 	gpt2Token.WithDecoder(bpeDecoder)
+// }
 
-func chatHandler(w http.ResponseWriter, r *http.Request) {
-	var chatReq ChatRequest
-	err := json.NewDecoder(r.Body).Decode(&chatReq)
-	if err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
-		return
-	}
+// func chatHandler(w http.ResponseWriter, r *http.Request) {
+// 	var chatReq ChatRequest
+// 	err := json.NewDecoder(r.Body).Decode(&chatReq)
+// 	if err != nil {
+// 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+// 		return
+// 	}
 
-	inputSeq := tokenizer.NewInputSequence(chatReq.Input)
+// 	inputSeq := tokenizer.NewInputSequence(chatReq.Input)
 
-	// Tokenize input
-	encoded, err := gpt2Token.Encode(tokenizer.NewSingleEncodeInput(inputSeq), false)
-	if err != nil {
-		http.Error(w, "Failed to tokenize input", http.StatusInternalServerError)
-		return
-	}
+// 	// Tokenize input
+// 	encoded, err := gpt2Token.Encode(tokenizer.NewSingleEncodeInput(inputSeq), false)
+// 	if err != nil {
+// 		http.Error(w, "Failed to tokenize input", http.StatusInternalServerError)
+// 		return
+// 	}
 
-	// Convert tokens to tensor
-	inputTensor := tensor.New(tensor.Of(tensor.String), tensor.WithShape(1, len(encoded.Ids)))
-	for i, token := range encoded.Ids {
-		inputTensor.SetAt(int64(token), i)
-	}
+// 	// Convert tokens to tensor
+// 	inputTensor := tensor.New(tensor.Of(tensor.String), tensor.WithShape(1, len(encoded.Ids)))
+// 	for i, token := range encoded.Ids {
+// 		inputTensor.SetAt(int64(token), i)
+// 	}
 
-	// println(inputTensor.Data().([]int64))
-	// Set the input for the backend using onnx.Value
-	input, err := onnx.NewTensor([]byte(inputTensor.String()))
-	if err != nil {
-		http.Error(w, "Failed to create input tensor " + err.Error(), http.StatusInternalServerError)
-		return
-	}
+// 	// println(inputTensor.Data().([]int64))
+// 	// Set the input for the backend using onnx.Value
+// 	input, err := onnx.NewTensor([]byte(inputTensor.String()))
+// 	if err != nil {
+// 		http.Error(w, "Failed to create input tensor " + err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
 
-	// Set the input tensor in the model
-	err = model.SetInput(0, input)
-	if err != nil {
-		http.Error(w, "Failed to set input tensor", http.StatusInternalServerError)
-		return
-	}
+// 	// Set the input tensor in the model
+// 	err = model.SetInput(0, input)
+// 	if err != nil {
+// 		http.Error(w, "Failed to set input tensor", http.StatusInternalServerError)
+// 		return
+// 	}
 
 	
-	// Run the inference
-	err = backend.Run()
-	if err != nil {
-		http.Error(w, "Failed to run inference", http.StatusInternalServerError)
-		return
-	}
+// 	// Run the inference
+// 	err = backend.Run()
+// 	if err != nil {
+// 		http.Error(w, "Failed to run inference", http.StatusInternalServerError)
+// 		return
+// 	}
 
-	// Extract and process output
-	output, err := model.GetOutputTensors()
-	if err != nil {
-		http.Error(w, "Failed to get output", http.StatusInternalServerError)
-		return
-	}
+// 	// Extract and process output
+// 	output, err := model.GetOutputTensors()
+// 	if err != nil {
+// 		http.Error(w, "Failed to get output", http.StatusInternalServerError)
+// 		return
+// 	}
 
-	// Decode output tokens
-	decodedOutput := gpt2Token.Decode(output[0].Data().([]int), true)
+// 	// Decode output tokens
+// 	decodedOutput := gpt2Token.Decode(output[0].Data().([]int), true)
 
-	// Create response
-	chatResp := ChatResponse{
-		Response: decodedOutput,
-	}
+// 	// Create response
+// 	chatResp := ChatResponse{
+// 		Response: decodedOutput,
+// 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(chatResp)
-}
+// 	w.Header().Set("Content-Type", "application/json")
+// 	json.NewEncoder(w).Encode(chatResp)
+// }
 
-func main() {
-	// Initialize the model and tokenizer
-	initModel()
-	initTokenizer()
+// func main() {
+// 	// Initialize the model and tokenizer
+// 	initModel()
+// 	initTokenizer()
 
-	http.HandleFunc("/chat", chatHandler)
+// 	http.HandleFunc("/chat", chatHandler)
 
-	fmt.Println("Server is running on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
-}
+// 	fmt.Println("Server is running on port 8080")
+// 	log.Fatal(http.ListenAndServe(":8080", nil))
+// }
