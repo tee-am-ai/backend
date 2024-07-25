@@ -226,6 +226,23 @@ func HistoryChat(db *mongo.Database, col string, respw http.ResponseWriter, req 
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error decoding token "+err.Error())
 		return
 	}
+	pathParts := strings.Split(req.URL.Path, "/")
+	if len(pathParts) > 2 {
+		objid, err := primitive.ObjectIDFromHex(pathParts[2])
+		if err != nil {
+			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
+			return
+		}
+		filter := bson.M{"_id": objid}
+		var chat model.ChatUser
+		err = db.Collection(col).FindOne(context.Background(), filter).Decode(&chat)
+		if err != nil {
+			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
+			return
+		}
+		helper.WriteJSON(respw, http.StatusOK, chat)
+		return
+	}
 	type chats struct {
 		ID       primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 		Topic    string             `bson:"topic,omitempty" json:"topic,omitempty"`
