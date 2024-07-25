@@ -255,3 +255,42 @@ func HistoryChat(db *mongo.Database, col string, respw http.ResponseWriter, req 
 	}
 	helper.WriteJSON(respw, http.StatusOK, chatsuser)
 }
+
+func DeleteChat(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request, PASETOPUBLICKEYENV string) {
+	tokenstring := req.Header.Get("Login")
+	payload, err := helper.Decode(PASETOPUBLICKEYENV, tokenstring)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error decoding token "+err.Error())
+		return
+	}
+	pathParts := strings.Split(req.URL.Path, "/")
+	if len(pathParts) > 2 {
+		objid, err := primitive.ObjectIDFromHex(pathParts[2])
+		if err != nil {
+			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
+			return
+		}
+		var chat model.ChatUser
+		err = db.Collection(col).FindOne(context.Background(), bson.M{"_id": objid}).Decode(&chat)
+		if err != nil {
+			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
+			return
+		}
+		if chat.UserID != payload.Id {
+			helper.ErrorResponse(respw, req, http.StatusUnauthorized, "Unauthorized", "anda bukan pemilik chat ini")
+			return
+		}
+		filter := bson.M{"_id": objid}
+		_, err = db.Collection(col).DeleteOne(context.Background(), filter)
+		if err != nil {
+			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
+			return
+		}
+		resp := map[string]any{
+			"message": "berhasil menghapus chat",
+		}
+		helper.WriteJSON(respw, http.StatusOK, resp)
+		return
+	}
+	helper.ErrorResponse(respw, req, http.StatusNotFound, "Not Found", "The requested resource was not found")
+}
