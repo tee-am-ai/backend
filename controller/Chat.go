@@ -111,7 +111,7 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 			return
 		}
 		pathParts := strings.Split(req.URL.Path, "/")
-		var id string
+		var id primitive.ObjectID
 		if len(pathParts) > 1 {
 			chat := model.ChatUser{
 				Topic:    chat.Query,
@@ -125,12 +125,11 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 				},
 				UserID: payload.Id,
 			}
-			insertedID, err := helper.InsertOneDoc(db, "chats", chat)
+			id, err = helper.InsertOneDoc(db, "chats", chat)
 			if err != nil {
 				helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
 				return
 			}
-			id = primitive.ObjectID(insertedID).Hex()
 		} else {
 			objid, err := primitive.ObjectIDFromHex(pathParts[2])
 			if err != nil {
@@ -154,15 +153,13 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 				helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: update")
 				return
 			}
-		}
-		if id == "" {
-			id = pathParts[2]
+			id = objid
 		}
 		resp := map[string]any{
-			"id":       id,
+			"idtopic": id,
 			"question": chat.Query,
 			"answer": generatedText,
-			"userid":   payload.Id,
+			"userid": payload.Id,
 		}
 		helper.WriteJSON(respw, http.StatusOK, resp)
 	} else {
@@ -231,7 +228,7 @@ func HistoryChat(db *mongo.Database, col string, respw http.ResponseWriter, req 
 	}
 	type chats struct {
 		ID       primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
-		Title    string             `bson:"title,omitempty" json:"title,omitempty"`
+		Topic    string             `bson:"topic,omitempty" json:"topic,omitempty"`
 		UserID   primitive.ObjectID `bson:"userid,omitempty" json:"userid,omitempty"`
 	}
 	chatsuser, err := helper.GetAllDocs[[]chats](db, col, bson.M{"userid": payload.Id})
