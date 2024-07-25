@@ -213,6 +213,22 @@ func Chat2(respw http.ResponseWriter, req *http.Request) {
 	helper.WriteJSON(respw, http.StatusOK, returndata)
 }
 
-func HistoryChat(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
-	
+func HistoryChat(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request, PASETOPUBLICKEYENV string) {
+	tokenstring := req.Header.Get("Login")
+	payload, err := helper.Decode(PASETOPUBLICKEYENV, tokenstring)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error decoding token "+err.Error())
+		return
+	}
+	type chats struct {
+		ID       primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+		Title    string             `bson:"title,omitempty" json:"title,omitempty"`
+		UserID   primitive.ObjectID `bson:"userid,omitempty" json:"userid,omitempty"`
+	}
+	chatsuser, err := helper.GetAllDocs[[]chats](db, col, bson.M{"userid": payload.Id})
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get data, "+err.Error())
+		return
+	}
+	helper.WriteJSON(respw, http.StatusOK, chatsuser)
 }
