@@ -46,6 +46,21 @@ func UpdateOneDoc(db *mongo.Database, col string, id primitive.ObjectID, doc any
 	return nil
 }
 
+func DeleteOneDoc(_id primitive.ObjectID, db *mongo.Database, col string) error {
+	collection := db.Collection(col)
+	filter := bson.M{"_id": _id}
+	result, err := collection.DeleteOne(context.TODO(), filter)
+	if err != nil {
+		return fmt.Errorf("error deleting data for ID %s: %s", _id, err.Error())
+	}
+
+	if result.DeletedCount == 0 {
+		return fmt.Errorf("data with ID %s not found", _id)
+	}
+
+	return nil
+}
+
 func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err error) {
 	collection := db.Collection("users")
 	filter := bson.M{"email": email}
