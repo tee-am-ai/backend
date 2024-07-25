@@ -67,7 +67,7 @@ func GetAllDocs[T any](db *mongo.Database, col string, filter bson.M) (docs T, e
 		return 
 	}
 	defer cursor.Close(ctx)
-	err = cursor.All(context.TODO(), &docs)
+	err = cursor.All(ctx, &docs)
 	if err != nil {
 		return 
 	}
