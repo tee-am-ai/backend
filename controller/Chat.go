@@ -114,7 +114,7 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 		var id string
 		if len(pathParts) > 1 {
 			chat := model.ChatUser{
-				Title:    chat.Query,
+				Topic:    chat.Query,
 				Chat:     []model.Chat{
 					{
 						ID:        primitive.NewObjectID(),
