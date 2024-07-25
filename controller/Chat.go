@@ -288,6 +288,8 @@ func DeleteChat(db *mongo.Database, col string, respw http.ResponseWriter, req *
 		}
 		resp := map[string]any{
 			"message": "berhasil menghapus chat",
+			"idtopic": objid,
+			"userid":  payload.Id,
 		}
 		helper.WriteJSON(respw, http.StatusOK, resp)
 		return
