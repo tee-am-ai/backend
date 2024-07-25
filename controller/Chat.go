@@ -111,6 +111,7 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 			return
 		}
 		pathParts := strings.Split(req.URL.Path, "/")
+		var id string
 		if len(pathParts) > 1 {
 			chat := model.ChatUser{
 				Title:    chat.Query,
@@ -124,7 +125,12 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 				},
 				UserID: payload.Id,
 			}
-			helper.InsertOneDoc(db, "chats", chat)
+			insertedID, err := helper.InsertOneDoc(db, "chats", chat)
+			if err != nil {
+				helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
+				return
+			}
+			id = primitive.ObjectID(insertedID).Hex()
 		} else {
 			objid, err := primitive.ObjectIDFromHex(pathParts[2])
 			if err != nil {
@@ -149,8 +155,11 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 				return
 			}
 		}
+		if id == "" {
+			id = pathParts[2]
+		}
 		resp := map[string]any{
-			"id":       pathParts[2],
+			"id":       id,
 			"question": chat.Query,
 			"answer": generatedText,
 			"userid":   payload.Id,
