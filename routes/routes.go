@@ -30,6 +30,8 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		controller.SignUp(config.Mongoconn, "users", w, r)
 	case method == "POST" && path == "login":
 		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
+	case method == "GET" && path == "chat":
+		controller.HistoryChat(config.Mongoconn, "chats", w, r, config.GetEnv("PASETOPUBLICKEY"))
 	case method == "POST" && path == "chat":
 		controller.Chat(config.Mongoconn, w, r, config.GetEnv("TOKENMODEL"), config.GetEnv("PASETOPUBLICKEY"))
 	case method == "POST" && path == "chat2":
