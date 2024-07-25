@@ -112,6 +112,8 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 		}
 		pathParts := strings.Split(req.URL.Path, "/")
 		var id primitive.ObjectID
+		println(pathParts[0])
+		println(pathParts[1])
 		println(len(pathParts))
 		if len(pathParts) < 2 {
 			chat := model.ChatUser{
