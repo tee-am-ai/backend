@@ -110,8 +110,8 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error extracting generated text")
 			return
 		}
-		idchat := strings.Split(req.URL.Path, "/")[2]
-		if idchat == "" {
+		pathParts := strings.Split(req.URL.Path, "/")
+		if len(pathParts) > 1 {
 			chat := model.ChatUser{
 				Title:    chat.Query,
 				Chat:     []model.Chat{
@@ -126,7 +126,7 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 			}
 			helper.InsertOneDoc(db, "chats", chat)
 		} else {
-			objid, err := primitive.ObjectIDFromHex(idchat)
+			objid, err := primitive.ObjectIDFromHex(pathParts[2])
 			if err != nil {
 				helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+err.Error())
 				return
@@ -150,7 +150,7 @@ func Chat(db *mongo.Database, respw http.ResponseWriter, req *http.Request, toke
 			}
 		}
 		resp := map[string]any{
-			"id":       idchat,
+			"id":       pathParts[2],
 			"question": chat.Query,
 			"answer": generatedText,
 			"userid":   payload.Id,
