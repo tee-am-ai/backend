@@ -34,6 +34,8 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		controller.HistoryChat(config.Mongoconn, "chats", w, r, config.GetEnv("PASETOPUBLICKEY"))
 	case method == "POST" && path == "chat":
 		controller.Chat(config.Mongoconn, w, r, config.GetEnv("TOKENMODEL"), config.GetEnv("PASETOPUBLICKEY"))
+	case method == "DELETE" && path == "chat":
+		controller.DeleteChat(config.Mongoconn, "chats", w, r, config.GetEnv("PASETOPUBLICKEY"))
 	case method == "POST" && path == "chat2":
 		controller.Chat2(w, r)
 	case method == "POST" && path == "add_ulasan":
