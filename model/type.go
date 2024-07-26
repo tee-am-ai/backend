@@ -53,3 +53,10 @@ type Payload struct {
 	Iat   time.Time          `json:"iat"`
 	Nbf   time.Time          `json:"nbf"`
 }
+
+type Ulasan struct {
+	NamaLengkap string `bson:"namalengkap,omitempty" json:"namalengkap,omitempty"`
+	Email       string `bson:"email,omitempty" json:"email,omitempty"`
+	Rating      string `bson:"rating,omitempty" json:"rating,omitempty"`
+	Message     string `bson:"message,omitempty" json:"message,omitempty"`
+}
