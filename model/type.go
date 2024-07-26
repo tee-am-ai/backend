@@ -21,6 +21,27 @@ type Password struct {
 	Confirmpassword string `bson:"confirmpass,omitempty" json:"confirmpass,omitempty"`
 }
 
+type Ulasan struct {
+	NamaLengkap string `bson:"namalengkap,omitempty" json:"namalengkap,omitempty"`
+	Email       string `bson:"email,omitempty" json:"email,omitempty"`
+	Rating      uint8  `bson:"rating,omitempty" json:"rating,omitempty"`
+	Message     string `bson:"message,omitempty" json:"message,omitempty"`
+}
+
+type ChatUser struct {
+	ID     primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	Topic  string             `bson:"topic,omitempty" json:"topic,omitempty"`
+	Chat   []Chat             `bson:"chat,omitempty" json:"chat,omitempty"`
+	UserID primitive.ObjectID `bson:"userid,omitempty" json:"userid,omitempty"`
+}
+
+type Chat struct {
+	ID        primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	Question  string             `bson:"question,omitempty" json:"question,omitempty"`
+	Answer    string             `bson:"answer,omitempty" json:"answer,omitempty"`
+	CreatedAt time.Time          `bson:"created_at,omitempty" json:"created_at,omitempty"`
+}
+
 type AIRequest struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	User      User               `bson:"user,omitempty" json:"user,omitempty"`

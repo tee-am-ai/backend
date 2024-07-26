@@ -24,9 +24,25 @@ func LogIn(c *gin.Context) {
 }
 
 func Chat(c *gin.Context) {
-	controller.Chat(c.Writer, c.Request, os.Getenv("GO_TOKEN_MODEL"))
+	controller.Chat(config.Mongoconn, c.Writer, c.Request, os.Getenv("GO_TOKEN_MODEL"), os.Getenv("GO_PASETO_PUBLIC_KEY"))
+}
+
+func GetChat(c *gin.Context) {
+	controller.HistoryChat(config.Mongoconn, "chats", c.Writer, c.Request, os.Getenv("GO_PASETO_PUBLIC_KEY"))
+}
+
+func DeleteChat(c *gin.Context) {
+	controller.DeleteChat(config.Mongoconn, "chats", c.Writer, c.Request, os.Getenv("GO_PASETO_PUBLIC_KEY"))
 }
 
 func GetUser(c *gin.Context) {
 	controller.GetUser(config.Mongoconn, c.Writer, c.Request, "users", os.Getenv("GO_PASETO_PUBLIC_KEY"))
+}
+
+func AddUlasan(c *gin.Context) {
+	controller.AddUlasan(config.Mongoconn, c.Writer, c.Request, "ulasans", os.Getenv("GO_PASETO_PUBLIC_KEY"))
+}
+
+func GetAllUlasan(c *gin.Context) {
+	controller.GetAllUlasan(config.Mongoconn, "ulasans", c.Writer, c.Request)
 }

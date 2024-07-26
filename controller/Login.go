@@ -49,7 +49,7 @@ func LogIn(db *mongo.Database, w http.ResponseWriter, r *http.Request, col, priv
 		return
 	}
 
-	tokenstring, err := helper.Encode(user.ID, user.Email, privatekey)
+	tokenstring, err := helper.Encode(existsDoc.ID, user.Email, privatekey)
 	if err != nil {
 		helper.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : token")
 		return
