@@ -14,6 +14,7 @@ import (
 	"github.com/tee-am-ai/backend/model"
 )
 
+// funsi untuk chat
 func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	var chat model.AIRequest
 
