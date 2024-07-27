@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/badoux/checkmail"
 	"github.com/tee-am-ai/backend/helper"
 	model "github.com/tee-am-ai/backend/model"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -21,6 +22,10 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 
 	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data user")
+		return
+	}
+	if err := checkmail.ValidateFormat(user.Email); err != nil {
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
 		return
 	}
 
