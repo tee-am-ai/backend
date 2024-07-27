@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
 
 	"github.com/badoux/checkmail"
 	"github.com/tee-am-ai/backend/helper"
@@ -32,10 +31,6 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	userExists, _ := helper.GetUserFromEmail(user.Email, db)
 	if user.Email == userExists.Email {
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email sudah didaftarkan")
-		return
-	}
-	if strings.Contains(user.Password, " ") {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password tidak boleh mengandung spasi")
 		return
 	}
 
