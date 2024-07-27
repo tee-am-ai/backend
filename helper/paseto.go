@@ -39,14 +39,7 @@ func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 	token, err = parser.ParseV4Public(pubKey, tokenstring, nil) // this will fail if parsing failes, cryptographic checks fail, or validation rules fail
 	if err != nil {
 		return payload, fmt.Errorf("Decode ParseV4Public : %v", err)
-	} 
+	}
 	err = json.Unmarshal(token.ClaimsJSON(), &payload)
 	return payload, err
-}
-
-func GenerateKey() (privateKey, publicKey string) {
-	secretKey := paseto.NewV4AsymmetricSecretKey() // don't share this!!!
-	publicKey = secretKey.Public().ExportHex()     // DO share this one
-	privateKey = secretKey.ExportHex()
-	return privateKey, publicKey
 }
