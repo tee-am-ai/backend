@@ -32,3 +32,11 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
 }
+
+func Home(respw http.ResponseWriter, req *http.Request) {
+	resp := map[string]string{
+		"github_repo": "https://github.com/tee-am-ai/backend",
+		"message":     "Ampun puh sepuh, aku mah masih pemula 🙏",
+	}
+	helper.WriteJSON(respw, http.StatusOK, resp)
+}
