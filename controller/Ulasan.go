@@ -40,10 +40,4 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 		return
 	}
 
-	// Response sukses
-	resp := map[string]any{
-		"message":    "ulasan berhasil ditambahkan",
-		"insertedID": insertedID,
-	}
-	helper.WriteJSON(respw, http.StatusCreated, resp)
 }
