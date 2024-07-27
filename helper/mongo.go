@@ -72,18 +72,3 @@ func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err err
 	}
 	return doc, nil
 }
-
-func GetAllDocs[T any](db *mongo.Database, col string, filter bson.M) (docs T, err error) {
-	ctx := context.TODO()
-	collection := db.Collection(col)
-	cursor, err := collection.Find(ctx, filter)
-	if err != nil {
-		return
-	}
-	defer cursor.Close(ctx)
-	err = cursor.All(ctx, &docs)
-	if err != nil {
-		return
-	}
-	return
-}
