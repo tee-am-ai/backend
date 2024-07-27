@@ -6,6 +6,7 @@ import (
 
 	"github.com/tee-am-ai/backend/helper"
 	model "github.com/tee-am-ai/backend/model"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -24,6 +25,14 @@ func AddUlasan(db *mongo.Database, col string, respw http.ResponseWriter, req *h
 	if ulasan.NamaLengkap == "" || ulasan.Email == "" || ulasan.Rating == "" || ulasan.Message == "" {
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
 		return
+	}
+
+	// Masukkan data ulasan ke database
+	ulasanData := bson.M{
+		"namalengkap": ulasan.NamaLengkap,
+		"email":       ulasan.Email,
+		"rating":      ulasan.Rating,
+		"message":     ulasan.Message,
 	}
 
 }
